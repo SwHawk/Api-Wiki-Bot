@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * Modèle de donnée des recettes d'artisanat de
  * GuildWars 2
  * 
+ * @author SwHawk
+ * 
  * @ORM\Entity @ORM\Table(name="Recipes")
  */
 class Recipe {

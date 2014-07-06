@@ -6,6 +6,8 @@ use GuzzleHttp\Client;
 
 /**
  * Classe du bot communicant avec l'API des objets de GuildWars2 
+ * 
+ * @author SwHawk
  */
 class GW2ItemBot extends GW2ApiBot {
 

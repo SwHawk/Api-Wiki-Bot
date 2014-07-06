@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Modèle de données des pièces d'armures de GuildWars 2
  * 
+ * @author SwHawk
+ * 
  * @ORM\Entity @ORM\Table(name="Armorpieces")
  */
 class Armor extends BonusItem {

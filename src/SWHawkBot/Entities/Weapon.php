@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Modèle de données des armes de GuildWars2
  * 
+ * @author SwHawk
+ * 
  * @ORM\Entity @ORM\Table(name="Weapons")
  */
 class Weapon extends BonusItem {

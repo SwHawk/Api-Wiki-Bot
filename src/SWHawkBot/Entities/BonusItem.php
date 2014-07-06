@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * différentes caractéristiques d'un joueur. Ces objets peuvent présenter 1 ou
  * 2 slots d'infusions ou 1 ou 2 slots de composants d'amélioration
  * 
+ * @author SwHawk
+ * 
  * @ORM\MappedSuperClass
  */
 

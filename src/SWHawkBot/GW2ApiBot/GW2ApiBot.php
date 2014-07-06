@@ -5,6 +5,8 @@ namespace SWHawkBot\GW2ApiBot;
 /**
  * Classe abstraite contenant les constantes auxquelles
  * accèdent les bots communicant avec l'API GuildWars2
+ * 
+ * @author SwHawk
  */
 abstract class GW2ApiBot {
 

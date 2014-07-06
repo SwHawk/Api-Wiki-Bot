@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * Elle n'est pas censée être utilisée car tout objet de la classe **Item**
  * ne sera pas persisté en base de donnée
  * 
+ * @author SwHawk
+ * 
  * @ORM\MappedSuperClass
  */
 class Item {

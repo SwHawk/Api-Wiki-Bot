@@ -7,6 +7,8 @@ use GuzzleHttp\Client;
 /**
  * Classe du bot communicant avec l'API des recettes
  * d'artisanat de GuildWars2
+ * 
+ * @author SwHawk
  */
 class GW2RecipeBot extends GW2ApiBot {
 
