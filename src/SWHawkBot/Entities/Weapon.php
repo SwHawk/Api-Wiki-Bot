@@ -48,6 +48,7 @@ class Weapon extends BonusItem {
 	/**
 	 * Correspondances API/wiki-fr types de dommages
 	 */
+	
 	const API_TYPE_CHOKING = "Choking";
 	const TYPE_CHOKING = "Ténèbres";
 	const API_TYPE_FIRE = "Fire";
@@ -59,6 +60,48 @@ class Weapon extends BonusItem {
 	const API_TYPE_PHYSICAL = "Physical";
 	const TYPE_PHYSICAL = "Physique";
 
+	/**
+	 * Correspondances API/wiki-fr Armes
+	 */
+	
+	const API_TYPE_AXE = "Axe";
+	const TYPE_AXE = "Hache";
+	const API_TYPE_DAGGER = "Dagger";
+	const TYPE_DAGGER = "Dague";
+	const API_TYPE_FOCUS = "Focus";
+	const TYPE_FOCUS = "Focus";
+	const API_TYPE_GREATSWORD = "Greatsword";
+	const TYPE_GREATSWORD = "Espadon";
+	const API_TYPE_HAMMER = "Hammer";
+	const TYPE_HAMMER = "Marteau";
+	const API_TYPE_HARPOON = "Harpoon";
+	const TYPE_HARPOON = "Lance";
+	const API_TYPE_LONGBOW = "LongBow";
+	const TYPE_LONGBOW = "Arc long";
+	const API_TYPE_MACE = "Mace";
+	const TYPE_MACE = "Masse";
+	const API_TYPE_PISTOL = "Pistol";
+	const TYPE_PISTOL = "Pistolet";
+	const API_TYPE_RIFLE = "Rifle";
+	const TYPE_RIFLE = "Fusil";
+	const API_TYPE_SCEPTER = "Scepter";
+	const TYPE_SCEPTER = "Sceptre";
+	const API_TYPE_SHIELD = "Shield";
+	const TYPE_SHIELD = "Bouclier";
+	const API_TYPE_SHORTBOW = "ShortBow";
+	const TYPE_SHORTBOW = "Arc court";
+	const API_TYPE_SPEARGUN = "Speargun";
+	const TYPE_SPEARGUN = "Fusil-harpon";
+	const API_TYPE_STAFF = "Staff";
+	const TYPE_STAFF = "Bâton";
+	const API_TYPE_SWORD = "Sword";
+	const TYPE_SWORD = "Epée";
+	const API_TYPE_TORCH = "Torch";
+	const TYPE_TORCH = "Torche";
+	const API_TYPE_TRIDENT = "Trident";
+	const TYPE_TRIDENT = "Trident";
+	const API_TYPE_WARHORN = "Warhorn";
+	const TYPE_WARHORN = "Cor de guerre";
 	
 	/**
 	 * Constructeur de la classe, faisant appel aux
