@@ -17,7 +17,7 @@ class Weapon extends BonusItem
      * Type des dégâts infligés par l'arme
      *
      * @ORM\Column(type="string", nullable=true)
-     * 
+     *
      * @var string
      */
     protected $damageType;
@@ -26,7 +26,7 @@ class Weapon extends BonusItem
      * Puissance minimale de l'arme
      *
      * @ORM\Column(type="integer")
-     * 
+     *
      * @var integer
      */
     protected $minPower;
@@ -35,7 +35,7 @@ class Weapon extends BonusItem
      * Puissance maximale de l'arme
      *
      * @ORM\Column(type="integer")
-     * 
+     *
      * @var integer
      */
     protected $maxPower;
@@ -44,7 +44,7 @@ class Weapon extends BonusItem
      * Défense octroyée par l'arme (bouclier uniquement)
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $defense;

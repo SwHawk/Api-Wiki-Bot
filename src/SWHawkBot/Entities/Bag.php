@@ -17,7 +17,7 @@ class Bag extends Item
      * Taille du sac
      *
      * @ORM\Column(type="smallint")
-     * 
+     *
      * @var integer
      */
     protected $size;
@@ -27,7 +27,7 @@ class Bag extends Item
      * dans le sac auprès d'un vendeur
      *
      * @ORM\Column(type="boolean")
-     * 
+     *
      * @var boolean
      */
     protected $noSellOrSort;

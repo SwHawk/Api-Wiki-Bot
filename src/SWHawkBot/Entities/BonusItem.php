@@ -23,7 +23,7 @@ class BonusItem extends Item
      * Valeurs possibles : Défensive, Offensive, Utilitaire
      *
      * @ORM\Column(type="string", nullable=true)
-     * 
+     *
      * @var string|null
      */
     protected $infusionSlot1Type = null;
@@ -33,7 +33,7 @@ class BonusItem extends Item
      * null si l'emplacement est vide
      *
      * @ORM\Column(type="string", nullable=true)
-     * 
+     *
      * @var string|null
      */
     protected $infusionSlot2Type = null;
@@ -43,7 +43,7 @@ class BonusItem extends Item
      * null si l'emplacement est vide
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $upgradeComponent1Id = null;
@@ -53,7 +53,7 @@ class BonusItem extends Item
      * null si l'emplacement est vide
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $upgradeComponent2Id = null;
@@ -62,7 +62,7 @@ class BonusItem extends Item
      * Modificateur aux Dégats par altération donné par l'objet
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $degatsAlterationModifier = null;
@@ -71,7 +71,7 @@ class BonusItem extends Item
      * Modificateur à la Durée des Avantages donné par l'objet
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $dureeAvantagesModifier = null;
@@ -80,7 +80,7 @@ class BonusItem extends Item
      * Modificateur à la Férocité donné par l'objet
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $ferociteModifier = null;
@@ -89,7 +89,7 @@ class BonusItem extends Item
      * Modificateur à la Guérison donné par l'objet
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $guerisonModifier = null;
@@ -98,7 +98,7 @@ class BonusItem extends Item
      * Modificateur à la Précision donné par l'objet
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $precisionModifier = null;
@@ -107,7 +107,7 @@ class BonusItem extends Item
      * Modificateur à la Puissance donné par l'objet
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $puissanceModifier = null;
@@ -116,7 +116,7 @@ class BonusItem extends Item
      * Modificateur à la Robustesse donné par l'objet
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $robustesseModifier = null;
@@ -125,7 +125,7 @@ class BonusItem extends Item
      * Modificateur à la Vitalité donné par l'objet
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $vitaliteModifier = null;
@@ -134,7 +134,7 @@ class BonusItem extends Item
      * Identifiant du skill de buff de l'objet
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|nullc
      */
     protected $buffSkillId = null;
@@ -143,7 +143,7 @@ class BonusItem extends Item
      * Description du skill de buff de l'objet
      *
      * @ORM\column(type="text", nullable=true)
-     * 
+     *
      * @var string|null
      */
     protected $buffSkillDescription = null;

@@ -20,7 +20,7 @@ class Recipe
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
-     * 
+     *
      * @var integer
      */
     protected $id;
@@ -29,7 +29,7 @@ class Recipe
      * Identifiant de la recette pour l'API GuildWars2
      *
      * @ORM\Column(type="integer", unique=true)
-     * 
+     *
      * @var integer
      */
     protected $gw2apiId;
@@ -38,7 +38,7 @@ class Recipe
      * Type de la recette dans la discipline d'artisanat
      *
      * @ORM\Column(type="string")
-     * 
+     *
      * @var string
      */
     protected $type;
@@ -48,7 +48,7 @@ class Recipe
      * recette
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $weaponOutputItemId;
@@ -58,7 +58,7 @@ class Recipe
      * produite par la recette
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $armorOutputItemId;
@@ -68,7 +68,7 @@ class Recipe
      * par la recette
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $trinketOutputItemId;
@@ -78,7 +78,7 @@ class Recipe
      * par la recette
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $consumableOutputItemId;
@@ -88,7 +88,7 @@ class Recipe
      * recette
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $bagOutputItemId;
@@ -98,7 +98,7 @@ class Recipe
      * produit par la recette
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $craftingMaterialOutputItemId;
@@ -108,7 +108,7 @@ class Recipe
      * produit par la recette
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $upgradeComponentOutputItemId;
@@ -118,7 +118,7 @@ class Recipe
      * produite par la recette
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $containerOutputItemId;
@@ -128,7 +128,7 @@ class Recipe
      * par la recette
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $backpackOutputItemId;
@@ -137,7 +137,7 @@ class Recipe
      * Nombre d'objets produits par la recette
      *
      * @ORM\Column(type="integer")
-     * 
+     *
      * @var integer
      */
     protected $output_item_count;
@@ -147,7 +147,7 @@ class Recipe
      * suivre la recette
      *
      * @ORM\Column(type="integer")
-     * 
+     *
      * @var integer
      */
     protected $difficulty;
@@ -157,7 +157,7 @@ class Recipe
      * la recette
      *
      * @ORM\Column(type="string")
-     * 
+     *
      * @var array
      */
     protected $disciplines;
@@ -167,7 +167,7 @@ class Recipe
      * de la recette
      *
      * @ORM\Column(type="integer")
-     * 
+     *
      * @var integer
      */
     protected $mat1Id;
@@ -176,7 +176,7 @@ class Recipe
      * Quantité nécessaire du premier ingrédient
      *
      * @ORM\Column(type="integer")
-     * 
+     *
      * @var integer
      */
     protected $mat1Qty;
@@ -186,7 +186,7 @@ class Recipe
      * de la recette
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $mat2Id = null;
@@ -195,7 +195,7 @@ class Recipe
      * Quantité nécessaire du deuxième ingrédient
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $mat2Qty = null;
@@ -205,7 +205,7 @@ class Recipe
      * de la recette
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $mat3Id = null;
@@ -214,7 +214,7 @@ class Recipe
      * Quantité nécessaire du troisième ingrédient
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $mat3Qty = null;
@@ -224,7 +224,7 @@ class Recipe
      * de la recette
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $mat4Id = null;
@@ -233,7 +233,7 @@ class Recipe
      * Quantité nécessaire du quatrième ingrédient
      *
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     *
      * @var integer|null
      */
     protected $mat4Qty = null;
@@ -245,7 +245,7 @@ class Recipe
      * Forge Mystique
      *
      * @ORM\Column(type="string")
-     * 
+     *
      * @var string
      */
     protected $discovery;
@@ -963,6 +963,7 @@ class Recipe
 
     /**
      * Setter général pour .
+     *
      * ..OutputItemId, en fonction du type
      *
      * @param integer $id            

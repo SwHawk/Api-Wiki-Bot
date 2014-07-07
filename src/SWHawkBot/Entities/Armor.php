@@ -19,7 +19,7 @@ class Armor extends BonusItem
      * Valeur possibles : Intermédiaire, Léger, Lourd
      *
      * @ORM\Column(type="string")
-     * 
+     *
      * @var string
      */
     protected $weightClass;
@@ -28,7 +28,7 @@ class Armor extends BonusItem
      * Défense octroyée par la pièce d'armure
      *
      * @ORM\Column(type="integer")
-     * 
+     *
      * @var integer
      */
     protected $defense;
