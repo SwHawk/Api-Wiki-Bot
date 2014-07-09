@@ -964,6 +964,8 @@ class Recipe
     /**
      * Setter général pour .
      *
+     *
+     *
      * ..OutputItemId, en fonction du type
      *
      * @param integer $id            

@@ -258,6 +258,7 @@ class BonusItem extends Item
         if (isset($item_specific['secondary_suffix_item_id'])) {
             $this->setUpgradeComponent2Id($item_specific['second_suffix_item_id']);
         }
+        return $this;
     }
 
     /**

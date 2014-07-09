@@ -3,6 +3,7 @@ use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Symfony\Component\Yaml\Parser;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -12,14 +13,9 @@ $config = Setup::createAnnotationMetadataConfiguration(array(
     __DIR__ . "/src/SWHawkBot/Entities"
 ), $isDevMode, null, null, false);
 
-$conn = array(
-    'driver' => 'pdo_mysql',
-    'user' => 'xxxxxxxxx',
-    'password' => 'xxxxxxxxxxxx',
-    'dbname' => 'xxxxxxxxxxx',
-    'host' => 'xxxxxxxxxxxx',
-    'charset' => 'utf8'
-);
+$yamlParser = new Parser();
 
-$entityManager = EntityManager::create($conn, $config);
+$yamlDoctrineConfig = $yamlParser->parse(file_get_contents(__DIR__.'/../config/doctrine-config.yaml'));
+
+$entityManager = EntityManager::create($yamlDoctrineConfig['config'], $config);
 ?>

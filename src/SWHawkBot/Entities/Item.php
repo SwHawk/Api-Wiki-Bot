@@ -275,6 +275,7 @@ class Item
         }
         
         $this->raw = $item;
+        return $this;
     }
 
     /**
