@@ -2,13 +2,16 @@
 namespace SWHawkBot\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
+use SWHawkBot\Factories\ItemFactory;
+use SWHawkBot\Entities\Weapon;
+use SWHawkBot\Entities\Armor;
 
 /**
  * Modèle de donnée des recettes d'artisanat de
  * GuildWars 2
  *
  * @author SwHawk
- *        
+ *
  *         @ORM\Entity @ORM\Table(name="Recipes")
  */
 class Recipe
@@ -44,34 +47,31 @@ class Recipe
     protected $type;
 
     /**
-     * Identifiant (Gw2apiId) de l'arme produite par la
-     * recette
+     * Arme crée par la recette (classe Weapon)
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\OneToOne(targetEntity="Weapon", cascade={"persist", "remove"})
      *
-     * @var integer|null
+     * @var Weapon
      */
-    protected $weaponOutputItemId;
+    protected $weaponOutputItem;
 
     /**
-     * Identifiant (Gw2apiId) de la pièce d'armure
-     * produite par la recette
+     * Pièce d'armure produite par la recette
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\OneToOne(targetEntity="Armor", cascade={"persist", "remove"})
      *
-     * @var integer|null
+     * @var Armor
      */
-    protected $armorOutputItemId;
+    protected $armorOutputItem;
 
     /**
-     * Identifiant (Gw2apiId) de l'accessoire produit
-     * par la recette
+     * Accessoire produit par la recette
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\OneToOne(targetEntity="Trinket", cascade={"persist", "remove"})
      *
-     * @var integer|null
+     * @var Trinket
      */
-    protected $trinketOutputItemId;
+    protected $trinketOutputItem;
 
     /**
      * Identifiant (Gw2apiId) du consommable produit
@@ -84,14 +84,13 @@ class Recipe
     protected $consumableOutputItemId;
 
     /**
-     * Identifiant (Gw2apiId) du sac produit par la
-     * recette
+     * Sac produit par la recette
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\OneToOne(targetEntity="Bag", cascade={"persist", "remove"})
      *
-     * @var integer|null
+     * @var Bag
      */
-    protected $bagOutputItemId;
+    protected $bagOUtputItem;
 
     /**
      * Identifiant (Gw2apiId) du composant d'artisanat
@@ -114,14 +113,13 @@ class Recipe
     protected $upgradeComponentOutputItemId;
 
     /**
-     * Identifiant (Gw2apiId) de la sacoche d'armure
-     * produite par la recette
+     * Sacoche d'armure produite par la recette
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\OneToOne(targetEntity="Container", cascade={"persist", "remove"})
      *
-     * @var integer|null
+     * @var Container
      */
-    protected $containerOutputItemId;
+    protected $containerOutputItem;
 
     /**
      * Identifiant (Gw2apiId) de l'objet de dos produit
@@ -265,21 +263,6 @@ class Recipe
     const RECIPE_BOUGHT = "Achetable";
 
     const RECIPE_MYSTICAL = "Forge mystique";
-
-    /**
-     * Correspondances API/wiki-fr Bijoutier
-     */
-    const API_TYPE_RING = "Ring";
-
-    const TYPE_RING = "Bague";
-
-    const API_TYPE_AMULET = "Amulet";
-
-    const TYPE_AMULET = "Amulette";
-
-    const API_TYPE_EARRING = "Earring";
-
-    const TYPE_EARRING = "Boucle d'oreille";
 
     /**
      * Correspondances API/wiki-fr Armes
@@ -515,7 +498,7 @@ class Recipe
     /**
      * Constructeur de la classe
      *
-     * @param array $recipe            
+     * @param array $recipe
      * @return Recipe
      */
     public function __construct($recipe = null)
@@ -523,37 +506,38 @@ class Recipe
         if (is_null($recipe)) {
             return $this;
         }
-        
+
         if (isset($recipe['recipe_id'])) {
             $this->setGw2apiId($recipe['recipe_id']);
         }
-        
+
         if (isset($recipe['type'])) {
             $this->setType($recipe['type']);
         }
-        
+
         if (isset($recipe['output_item_id'], $recipe['type'])) {
             $this->setOutputItemId($recipe['output_item_id'], $recipe['type']);
+            $this->setOutputItem($recipe['output_item_id']);
         }
-        
+
         if (isset($recipe['output_item_count'])) {
             $this->setOutputItemCount($recipe['output_item_count']);
         }
-        
+
         if (isset($recipe['min_rating'])) {
             $this->setDifficulty($recipe['min_rating']);
         }
-        
+
         if (isset($recipe['disciplines'])) {
             $this->setDisciplines($recipe['disciplines']);
         }
-        
+
         if (isset($recipe['flags'][0])) {
             $this->setDiscovery($recipe['flags'][0], $recipe['type']);
         } else {
             $this->setDiscovery(null, $recipe['type']);
         }
-        
+
         if (isset($recipe['ingredients'])) {
             foreach ($recipe['ingredients'] as $number => $ingredient_details) {
                 $idfunction = "setMat" . ($number + 1) . "Id";
@@ -562,13 +546,13 @@ class Recipe
                 $this->$qtyfunction($ingredient_details['count']);
             }
         }
-        
+
         return $this;
     }
 
     /**
      *
-     * @param integer $id            
+     * @param integer $id
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -583,7 +567,7 @@ class Recipe
 
     /**
      *
-     * @param string $type            
+     * @param string $type
      * @return Recipe
      */
     public function setType($type)
@@ -592,232 +576,232 @@ class Recipe
             $this->type = self::TYPE_AMULET;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_AXE) {
             $this->type = self::TYPE_AXE;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_BACKPACK) {
             $this->type = self::TYPE_BACKPACK;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_BAG) {
             $this->type = self::TYPE_BAG;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_BOOTS) {
             $this->type = self::TYPE_BOOTS;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_BULK) {
             $this->type = self::TYPE_BULK;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_COAT) {
             $this->type = self::TYPE_COAT;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_COMPONENT) {
             $this->type = self::TYPE_COMPONENT;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_CONSUMABLE) {
             $this->type = self::TYPE_CONSUMABLE;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_DAGGER) {
             $this->type = self::TYPE_DAGGER;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_DESSERT) {
             $this->type = self::TYPE_DESSERT;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_DYE) {
             $this->type = self::TYPE_DYE;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_EARRING) {
             $this->type = self::TYPE_EARRING;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_FEAST) {
             $this->type = self::TYPE_FEAST;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_FOCUS) {
             $this->type = self::TYPE_FOCUS;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_GLOVES) {
             $this->type = self::TYPE_GLOVES;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_GREATSWORD) {
             $this->type = self::TYPE_GREATSWORD;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_HAMMER) {
             $this->type = self::TYPE_HAMMER;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_HELM) {
             $this->type = self::TYPE_HELM;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_INGREDIENT_COOKING) {
             $this->type = self::TYPE_INGREDIENT_COOKING;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_INSCRIPTION) {
             $this->type = self::TYPE_INSCRIPTION;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_INSIGNIA) {
             $this->type = self::TYPE_INSIGNIA;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_LEGGINGS) {
             $this->type = self::TYPE_LEGGINGS;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_LONGBOW) {
             $this->type = self::TYPE_LONGBOW;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_MACE) {
             $this->type = self::TYPE_MACE;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_MEAL) {
             $this->type = self::TYPE_MEAL;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_PISTOL) {
             $this->type = self::TYPE_PISTOL;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_POTION) {
             $this->type = self::TYPE_POTION;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_REFINEMENT) {
             $this->type = self::TYPE_REFINEMENT;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_REFINEMENT_ECTOPLASM) {
             $this->type = self::TYPE_REFINEMENT_ECTOPLASM;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_REFINEMENT_OBSIDIAN) {
             $this->type = self::TYPE_REFINEMENT_OBSIDIAN;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_RIFLE) {
             $this->type = self::TYPE_RIFLE;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_RING) {
             $this->type = self::TYPE_RING;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_SCEPTER) {
             $this->type = self::TYPE_SCEPTER;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_SEASONING) {
             $this->type = self::TYPE_SEASONING;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_SHIELD) {
             $this->type = self::TYPE_SHIELD;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_SHORTBOW) {
             $this->type = self::TYPE_SHORTBOW;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_SHOULDERS) {
             $this->type = self::TYPE_SHOULDERS;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_SNACK) {
             $this->type = self::TYPE_SNACK;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_SOUP) {
             $this->type = self::TYPE_SOUP;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_SPEARGUN) {
             $this->type = self::TYPE_SPEARGUN;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_STAFF) {
             $this->type = self::TYPE_STAFF;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_SWORD) {
             $this->type = self::TYPE_SWORD;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_TORCH) {
             $this->type = self::TYPE_TORCH;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_TRIDENT) {
             $this->type = self::TYPE_TRIDENT;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_UPGRADE_COMPONENT) {
             $this->type = self::TYPE_UPGRADE_COMPONENT;
             return $this;
         }
-        
+
         if ($type == self::API_TYPE_WARHORN) {
             $this->type = self::TYPE_WARHORN;
             return $this;
@@ -828,52 +812,7 @@ class Recipe
 
     /**
      *
-     * @param integer $id            
-     * @throws \InvalidArgumentException
-     * @return Recipe
-     */
-    public function setWeaponOutputItemId($id)
-    {
-        if (! is_numeric($id)) {
-            throw new \InvalidArgumentException('La fonction attend un id entier. Id donné : ' . var_dump($id));
-        }
-        $this->weaponOutputItemId = $id;
-        return $this;
-    }
-
-    /**
-     *
-     * @param integer $id            
-     * @throws \InvalidArgumentException
-     * @return Recipe
-     */
-    public function setArmorOutputItemId($id)
-    {
-        if (! is_numeric($id)) {
-            throw new \InvalidArgumentException('La fonction attend un id entier. Id donné : ' . var_dump($id));
-        }
-        $this->armorOutputItemId = $id;
-        return $this;
-    }
-
-    /**
-     *
-     * @param integer $id            
-     * @throws \InvalidArgumentException
-     * @return Recipe
-     */
-    public function setTrinketOutputItemId($id)
-    {
-        if (! is_numeric($id)) {
-            throw new \InvalidArgumentException('La fonction attend un id entier. Id donné : ' . var_dump($id));
-        }
-        $this->trinketOutputItemId = $id;
-        return $this;
-    }
-
-    /**
-     *
-     * @param integer $id            
+     * @param integer $id
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -888,22 +827,7 @@ class Recipe
 
     /**
      *
-     * @param integer $id            
-     * @throws \InvalidArgumentException
-     * @return Recipe
-     */
-    public function setBagOutputItemId($id)
-    {
-        if (! is_numeric($id)) {
-            throw new \InvalidArgumentException('La fonction attend un id entier. Id donné : ' . var_dump($id));
-        }
-        $this->bagOutputItemId = $id;
-        return $this;
-    }
-
-    /**
-     *
-     * @param integer $id            
+     * @param integer $id
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -918,7 +842,7 @@ class Recipe
 
     /**
      *
-     * @param integer $id            
+     * @param integer $id
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -933,22 +857,7 @@ class Recipe
 
     /**
      *
-     * @param integer $id            
-     * @throws \InvalidArgumentException
-     * @return Recipe
-     */
-    public function setContainerOutputItemId($id)
-    {
-        if (! is_numeric($id)) {
-            throw new \InvalidArgumentException('La fonction attend un id entier. Id donné : ' . var_dump($id));
-        }
-        $this->containerOutputItemId = $id;
-        return $this;
-    }
-
-    /**
-     *
-     * @param integer $id            
+     * @param integer $id
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -962,60 +871,24 @@ class Recipe
     }
 
     /**
-     * Setter général pour .
+     * @param Weapon $weapon
+     * @return \SWHawkBot\Entities\Recipe
+     */
+    public function setWeaponOutputItem(Weapon $weapon)
+    {
+        $this->weaponOutputItem = $weapon;
+        return $this;
+    }
+
+    /**
+     * Setter général pour xxxOutputItemId, en fonction du type
      *
-     *
-     *
-     * ..OutputItemId, en fonction du type
-     *
-     * @param integer $id            
-     * @param string $type            
+     * @param integer $id
+     * @param string $type
      * @return \SWHawkBot\Entities\Recipe
      */
     public function setOutputItemId($id, $type)
     {
-        if (in_array($type, array(
-            self::API_TYPE_AMULET,
-            self::API_TYPE_EARRING,
-            self::API_TYPE_RING
-        ))) {
-            $this->setTrinketOutputItemId($id);
-        }
-        if (in_array($type, array(
-            self::API_TYPE_BOOTS,
-            self::API_TYPE_HELM,
-            self::API_TYPE_COAT,
-            self::API_TYPE_GLOVES,
-            self::API_TYPE_LEGGINGS,
-            self::API_TYPE_SHOULDERS,
-            self::API_TYPE_HELMAQUATIC
-        ))) {
-            $this->setArmorOutputItemId($id);
-        }
-        if (in_array($type, array(
-            self::API_TYPE_AXE,
-            self::API_TYPE_DAGGER,
-            self::API_TYPE_FOCUS,
-            self::API_TYPE_GREATSWORD,
-            self::API_TYPE_HAMMER,
-            self::API_TYPE_HARPOON,
-            self::API_TYPE_LONGBOW,
-            self::API_TYPE_MACE,
-            self::API_TYPE_PISTOL,
-            self::API_TYPE_RIFLE,
-            self::API_TYPE_SCEPTER,
-            self::API_TYPE_SHIELD,
-            self::API_TYPE_SHORTBOW,
-            self::API_TYPE_SPEARGUN,
-            self::API_TYPE_STAFF,
-            self::API_TYPE_SWORD,
-            self::API_TYPE_TORCH,
-            self::API_TYPE_TRIDENT,
-            self::API_TYPE_WARHORN
-        ))) {
-            $this->setWeaponOutputItemId($id);
-        }
-        
         if (in_array($type, array(
             self::API_TYPE_CONSUMABLE,
             self::API_TYPE_DESSERT,
@@ -1028,13 +901,7 @@ class Recipe
         ))) {
             $this->setConsumabletOutputItemId($id);
         }
-        
-        if (in_array($type, array(
-            self::API_TYPE_BAG
-        ))) {
-            $this->setBagOutputItemId($id);
-        }
-        
+
         if (in_array($type, array(
             self::API_TYPE_COMPONENT,
             self::API_TYPE_INGREDIENT_COOKING,
@@ -1046,19 +913,13 @@ class Recipe
         ))) {
             $this->setCraftingMaterialOutputItemId($id);
         }
-        
+
         if (in_array($type, array(
             self::API_TYPE_UPGRADE_COMPONENT
         ))) {
             $this->setUpgradeComponentOutputItemId($id);
         }
-        
-        if (in_array($type, array(
-            self::API_TYPE_BULK
-        ))) {
-            $this->setContainerOutputItemId($id);
-        }
-        
+
         if (in_array($type, array(
             self::API_TYPE_BACKPACK
         ))) {
@@ -1068,8 +929,85 @@ class Recipe
     }
 
     /**
+     * @param Armor $armor
+     * @return Recipe
+     */
+    public function setArmorOutputItem(Armor $armor)
+    {
+        $this->armorOutputItem = $armor;
+        return $this;
+    }
+
+    /**
+     * @param Bag $bag
+     * @return Recipe
+     */
+    public function setBagOutputItem(Bag $bag)
+    {
+        $this->bagOutputItem = $bag;
+        return $this;
+    }
+
+    /**
+     * @param Container $container
+     * @return Recipe
+     */
+    public function setContaineroutputItem(Container $container)
+    {
+        $this->containerOutputItem = $container;
+        return $this;
+
+    }
+
+    /**
+     * @param Trinket $trinket
+     * @return Recipe
+     */
+    public function setTrinketOutputItem(Trinket $trinket)
+    {
+        $this->trinketOutputItem = $trinket;
+        return $this;
+    }
+
+    /**
+     * Setter général pour xxxOutputItem
      *
-     * @param integer $count            
+     * @param integer $id
+     * @return \SWHawkBot\Entities\Recipe
+     */
+    public function setOutputItem($id)
+    {
+        $item = ItemFactory::returnItem($id);
+        if ($item instanceof Weapon)
+        {
+            $this->setWeaponOutputItem($item);
+            return $this;
+        }
+        if ($item instanceof Armor)
+        {
+            $this->setArmorOutputItem($item);
+            return $this;
+        }
+        if ($item instanceof Trinket)
+        {
+            $this->setTrinketOutputItem($item);
+            return $this;
+        }
+        if ($item instanceof Bag)
+        {
+            $this->setBagOutputItem($item);
+            return $this;
+        }
+        if ($item instanceof Container)
+        {
+            $this->setContainerOutputItem($item);
+            return $this;
+        }
+    }
+
+    /**
+     *
+     * @param integer $count
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -1084,7 +1022,7 @@ class Recipe
 
     /**
      *
-     * @param integer $difficulty            
+     * @param integer $difficulty
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -1099,8 +1037,8 @@ class Recipe
 
     /**
      *
-     * @param string $type            
-     * @param string $discovery            
+     * @param string $type
+     * @param string $discovery
      * @return Recipe
      */
     public function setDiscovery($type, $discovery = null)
@@ -1125,7 +1063,7 @@ class Recipe
 
     /**
      *
-     * @param integer $id            
+     * @param integer $id
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -1140,7 +1078,7 @@ class Recipe
 
     /**
      *
-     * @param integer $qty            
+     * @param integer $qty
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -1155,7 +1093,7 @@ class Recipe
 
     /**
      *
-     * @param integer $id            
+     * @param integer $id
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -1170,7 +1108,7 @@ class Recipe
 
     /**
      *
-     * @param integer $qty            
+     * @param integer $qty
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -1185,7 +1123,7 @@ class Recipe
 
     /**
      *
-     * @param integer $id            
+     * @param integer $id
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -1200,7 +1138,7 @@ class Recipe
 
     /**
      *
-     * @param integer $qty            
+     * @param integer $qty
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -1215,7 +1153,7 @@ class Recipe
 
     /**
      *
-     * @param integer $id            
+     * @param integer $id
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -1230,7 +1168,7 @@ class Recipe
 
     /**
      *
-     * @param integer $qty            
+     * @param integer $qty
      * @throws \InvalidArgumentException
      * @return Recipe
      */
@@ -1245,7 +1183,7 @@ class Recipe
 
     /**
      *
-     * @param array $disciplines            
+     * @param array $disciplines
      * @return Recipe
      */
     public function setDisciplines($disciplines)
