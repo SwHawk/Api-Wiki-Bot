@@ -15,7 +15,7 @@ $config = Setup::createAnnotationMetadataConfiguration(array(
 
 $yamlParser = new Parser();
 
-$yamlDoctrineConfig = $yamlParser->parse(file_get_contents(__DIR__.'/../config/doctrine-config.yaml'));
+$yamlDoctrineConfig = $yamlParser->parse(file_get_contents(__DIR__ . '/../config/doctrine-config.yaml'));
 
 $entityManager = EntityManager::create($yamlDoctrineConfig['config'], $config);
 ?>

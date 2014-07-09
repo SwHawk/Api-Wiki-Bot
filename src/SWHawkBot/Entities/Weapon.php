@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Modèle de données des armes de GuildWars2
  *
  * @author SwHawk
- *
+ *        
  *         @ORM\Entity @ORM\Table(name="Weapons", indexes={@ORM\Index(name="gw2apiid_idx",columns={"gw2apiId"})})
  */
 class Weapon extends BonusItem
@@ -157,37 +157,37 @@ class Weapon extends BonusItem
      *
      * @see \SWHawkBot\Entities\BonusItem::__construct()
      * @see \SWHawkBot\Entities\Item::__construct()
-     * @param array|null $weapon
+     * @param array|null $weapon            
      * @throws \InvalidArgumentException
      * @return Weapon
      */
     public function __construct($weapon = null)
     {
         parent::__construct($weapon);
-
+        
         $weapon_specific = $weapon['weapon'];
-
+        
         $this->setType($weapon_specific['type']);
         if (is_null($this->getType())) {
             throw new \InvalidArgumentException('Le type est null pour l\'item : ' . print_r($weapon));
         }
-
+        
         $this->setDamageType($weapon_specific['damage_type']);
-
+        
         $this->setMinPower($weapon_specific['min_power']);
-
+        
         $this->setMaxPower($weapon_specific['max_power']);
-
+        
         if ($weapon_specific['defense'] > 0) {
             $this->setDefense($weapon_specific['defense']);
         }
-
+        
         return $this;
     }
 
     /**
      *
-     * @param string $type
+     * @param string $type            
      * @return Weapon
      */
     public function setDamageType($type)
@@ -225,87 +225,87 @@ class Weapon extends BonusItem
             $this->type = self::TYPE_AXE;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_DAGGER || $type == self::TYPE_DAGGER) {
             $this->type = self::TYPE_DAGGER;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_FOCUS || $type == self::TYPE_FOCUS) {
             $this->type = self::TYPE_FOCUS;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_GREATSWORD || $type == self::TYPE_GREATSWORD) {
             $this->type = self::TYPE_GREATSWORD;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_HAMMER || $type == self::TYPE_HAMMER) {
             $this->type = self::TYPE_HAMMER;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_HARPOON || $type == self::TYPE_HARPOON) {
             $this->type = self::TYPE_HARPOON;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_LONGBOW || $type == self::TYPE_LONGBOW) {
             $this->type = self::TYPE_LONGBOW;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_MACE || $type == self::TYPE_MACE) {
             $this->type = self::TYPE_MACE;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_PISTOL || $type == self::TYPE_PISTOL) {
             $this->type = self::TYPE_PISTOL;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_RIFLE || $type == self::TYPE_RIFLE) {
             $this->type = self::TYPE_RIFLE;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_SCEPTER || $type == self::TYPE_SCEPTER) {
             $this->type = self::TYPE_SCEPTER;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_SHIELD || $type == self::TYPE_SHIELD) {
             $this->type = self::TYPE_SHIELD;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_SHORTBOW || $type == self::TYPE_SHORTBOW) {
             $this->type = self::TYPE_SHORTBOW;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_SPEARGUN || $type == self::TYPE_SPEARGUN) {
             $this->type = self::TYPE_SPEARGUN;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_STAFF || $type == self::TYPE_STAFF) {
             $this->type = self::TYPE_STAFF;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_SWORD || $type == self::TYPE_SWORD) {
             $this->type = self::TYPE_SWORD;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_TORCH || $type == self::TYPE_TORCH) {
             $this->type = self::TYPE_TORCH;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_TRIDENT || $type == self::TYPE_TRIDENT) {
             $this->type = self::TYPE_TRIDENT;
             return $this;
@@ -318,7 +318,7 @@ class Weapon extends BonusItem
 
     /**
      *
-     * @param integer $power
+     * @param integer $power            
      * @throws \InvalidArgumentException
      * @return Weapon
      */
@@ -333,7 +333,7 @@ class Weapon extends BonusItem
 
     /**
      *
-     * @param integer $power
+     * @param integer $power            
      * @throws \InvalidArgumentException
      * @return Weapon
      */
@@ -348,7 +348,7 @@ class Weapon extends BonusItem
 
     /**
      *
-     * @param integer $defense
+     * @param integer $defense            
      * @throws \InvalidArgumentException
      * @return Weapon
      */

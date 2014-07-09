@@ -1,14 +1,13 @@
 <?php
-
 namespace SWHawkBot;
 
 abstract class Constants
 {
+
     /**
      * Constantes de correspondances API/Wiki-fr
      * pour les différentes pièces d'armure
      */
-
     const API_ARMOR_WEIGHT_HEAVY = "Heavy";
 
     const ARMOR_WEIGHT_HEAVY = "Lourd";
@@ -53,7 +52,6 @@ abstract class Constants
      * Constantes de correspondance API/Wiki-fr
      * pour les sacs
      */
-
     const API_TYPE_BAG = "Bag";
 
     const TYPE_BAG = "Sac";
@@ -62,7 +60,6 @@ abstract class Constants
      * Constantes de correspondace API/Wiki-fr
      * pour les conteneurs
      */
-
     const API_TYPE_BULK = "Bulk";
 
     const TYPE_BULK = "En vrac";
@@ -71,7 +68,6 @@ abstract class Constants
      * Constantes de correspondance API/Wiki-fr
      * pour les métiers d'artisanat
      */
-
     const API_DISCIPLINE_ARMORSMITH = "Armorsmith";
 
     const DISCIPLINE_ARMORSMITH = "Forgeron d'armures";
@@ -108,7 +104,6 @@ abstract class Constants
      * Constantes de correspondance API/Wiki-fr
      * pour les accessoires
      */
-
     const API_TRINKET_TYPE_RING = "Ring";
 
     const TRINKET_TYPE_RING = "Bague";
@@ -129,7 +124,6 @@ abstract class Constants
      * Constantes de correspondance API/Wiki-fr
      * pour les armes
      */
-
     const API_WEAPON_TYPE_AXE = "Axe";
 
     const WEAPON_TYPE_AXE = "Hache";
@@ -210,7 +204,6 @@ abstract class Constants
      * Constantes de correspondance API/Wiki-fr
      * pour les objets de maître-queux
      */
-
     const API_TYPE_CONSUMABLE = "Consumable";
 
     const TYPE_CONSUMABLE = "Consommable";
@@ -274,5 +267,4 @@ abstract class Constants
     const API_TYPE_UPGRADE_COMPONENT = "UpgradeComponent";
 
     const TYPE_UPGRADE_COMPONENT = "Composant d'amélioration";
-
 }

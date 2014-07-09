@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  *
  * @author swhawk
- *
- * @ORM\Entity
- * @ORM\Table(name="Trinkets")
+ *        
+ *         @ORM\Entity
+ *         @ORM\Table(name="Trinkets")
  */
 class Trinket extends BonusItem
 {
@@ -30,15 +30,14 @@ class Trinket extends BonusItem
     public function __construct($trinket = null)
     {
         parent::__construct($trinket);
-
+        
         $trinket_specific = $trinket['trinket'];
-
+        
         $this->setType($trinket_specific['type']);
-        if (is_null($this->getType()))
-        {
-            throw new \InvalidArgumentException("Pas de type pour l'accessoire : ".print_r($trinket)."\n");
+        if (is_null($this->getType())) {
+            throw new \InvalidArgumentException("Pas de type pour l'accessoire : " . print_r($trinket) . "\n");
         }
-
+        
         return $this;
     }
 
@@ -48,12 +47,12 @@ class Trinket extends BonusItem
             $this->type = self::TYPE_AMULET;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_EARRING || $type == self::TYPE_EARRING || $type = self::API_TYPE_TRINKET) {
             $this->type = self::TYPE_EARRING;
             return $this;
         }
-
+        
         if ($type == self::API_TYPE_RING || $type == self::TYPE_RING) {
             $this->type = self::TYPE_RING;
             return $this;

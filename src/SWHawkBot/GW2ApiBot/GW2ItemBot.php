@@ -65,17 +65,17 @@ class GW2ItemBot extends GW2ApiBot
             $lang = "fr";
         }
         $this->lang = $lang;
-
+        
         $url = parent::BASE_URL . $this->version . "/";
-
+        
         $this->client_list = new Client(array(
             'base_url' => $url . self::ITEMS_JSON
         ));
-
+        
         $this->client_details = new Client(array(
             'base_url' => $url . self::ITEM_DETAILS_JSON
         ));
-
+        
         self::$item_ids = $this->getItemIds();
     }
 
@@ -94,7 +94,7 @@ class GW2ItemBot extends GW2ApiBot
      * Détermine si un objet existe dans l'API GuildWars2 grâce
      * à la liste des identifiants
      *
-     * @param integer $id
+     * @param integer $id            
      * @return boolean
      */
     public function isValidItemId($id)
@@ -102,7 +102,7 @@ class GW2ItemBot extends GW2ApiBot
         if (! is_numeric($id)) {
             return false;
         }
-
+        
         return (bool) in_array($id, self::$item_ids);
     }
 
@@ -110,7 +110,7 @@ class GW2ItemBot extends GW2ApiBot
      * Retourne le tableau JSON de l'objet renvoyé par l'API
      * GuildWars2
      *
-     * @param integer $id
+     * @param integer $id            
      * @return array|null
      */
     public function getItemRaw($id)
@@ -129,17 +129,16 @@ class GW2ItemBot extends GW2ApiBot
     /**
      * Retourne l'instance du singleton
      *
-     * @param string $version
-     * @param string $lang
+     * @param string $version            
+     * @param string $lang            
      * @return GW2ItemBot
      */
-    public static function getItemBotInstance($version, $lang) {
-        if (true === is_null(self::$instance))
-        {
+    public static function getItemBotInstance($version, $lang)
+    {
+        if (true === is_null(self::$instance)) {
             self::$instance = new self($version, $lang);
         }
         return self::$instance;
-
     }
 }
 

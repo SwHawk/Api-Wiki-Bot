@@ -1,5 +1,4 @@
 <?php
-
 namespace SWHawkBot\Factories;
 
 use SWHawkBot\GW2ApiBot\GW2ItemBot;
@@ -12,12 +11,12 @@ use SWHawkBot\Entities\Container;
 
 class ItemFactory
 {
+
     public static function returnItem($id)
     {
         $itemBot = GW2ItemBot::getItemBotInstance("1", "fr");
         $itemRaw = $itemBot->getItemRaw($id);
-        if (!is_null($itemRaw))
-        {
+        if (! is_null($itemRaw)) {
             $itemSpecificType = $itemRaw[strtolower($itemRaw['type'])]['type'];
             if (in_array($itemSpecificType, array(
                 Constants::API_WEAPON_TYPE_AXE,
@@ -39,11 +38,10 @@ class ItemFactory
                 Constants::API_WEAPON_TYPE_TORCH,
                 Constants::API_WEAPON_TYPE_TRIDENT,
                 Constants::API_WEAPON_TYPE_WARHORN
-            )))
-            {
+            ))) {
                 return new Weapon($itemRaw);
             }
-
+            
             if (in_array($itemSpecificType, array(
                 Constants::API_ARMOR_TYPE_BOOTS,
                 Constants::API_ARMOR_TYPE_COAT,
@@ -55,17 +53,15 @@ class ItemFactory
             ))) {
                 return new Armor($itemRaw);
             }
-
-            if ($itemSpecificType == Constants::API_TYPE_BAG)
-            {
+            
+            if ($itemSpecificType == Constants::API_TYPE_BAG) {
                 return new Bag($itemRaw);
             }
-
-            if ($itemSpecificType == Constants::API_TYPE_BULK)
-            {
+            
+            if ($itemSpecificType == Constants::API_TYPE_BULK) {
                 return new Container($itemRaw);
             }
-
+            
             if (in_array($itemSpecificType, array(
                 Constants::API_TRINKET_TYPE_AMULET,
                 Constants::API_TRINKET_TYPE_EARRING,
@@ -75,6 +71,5 @@ class ItemFactory
                 return new Trinket($itemRaw);
             }
         }
-
     }
 }

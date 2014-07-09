@@ -11,6 +11,7 @@ use GuzzleHttp\Client;
  */
 class GW2RecipeBot extends GW2ApiBot
 {
+
     /**
      * Instance du singleton
      *
@@ -60,8 +61,8 @@ class GW2RecipeBot extends GW2ApiBot
     /**
      * Constructeur du singleton
      *
-     * @param int $version
-     * @param string $lang
+     * @param int $version            
+     * @param string $lang            
      */
     private function __construct($version = parent::DFLT_VERSION, $lang = parent::DFLT_LANG)
     {
@@ -73,16 +74,16 @@ class GW2RecipeBot extends GW2ApiBot
             $lang = "fr";
         }
         $this->lang = "fr";
-
+        
         $url = parent::BASE_URL . $this->version . "/";
-
+        
         $this->client_list = new Client(array(
             'base_url' => $url . self::RECIPE_JSON
         ));
         $this->client_details = new Client(array(
             'base_url' => $url . self::RECIPE_DETAILS_JSON
         ));
-
+        
         self::$recipes_id = $this->getRecipesIds();
     }
 
@@ -101,7 +102,7 @@ class GW2RecipeBot extends GW2ApiBot
      * Détermine si une recette existe dans l'API GuildWars2 grâce
      * à la liste des identifiants
      *
-     * @param integer $id
+     * @param integer $id            
      * @return boolean
      */
     public function isValidRecipeId($id)
@@ -116,7 +117,7 @@ class GW2RecipeBot extends GW2ApiBot
      * Retourne le tableau JSON de la recette renvoyé par l'API
      * GuildWars2
      *
-     * @param integer $id
+     * @param integer $id            
      * @return array|null
      */
     public function getRecipeRaw($id)
@@ -134,14 +135,13 @@ class GW2RecipeBot extends GW2ApiBot
     /**
      * Retourne l'instance du singleton
      *
-     * @param string $version
-     * @param string $lang
+     * @param string $version            
+     * @param string $lang            
      * @return \SWHawkBot\GW2ApiBot\GW2RecipeBot
      */
     public static function getInstance($version = null, $lang = null)
     {
-        if (true === is_null(self::$instance))
-        {
+        if (true === is_null(self::$instance)) {
             self::$instance = new self($version, $lang);
         }
         return self::$instance;
