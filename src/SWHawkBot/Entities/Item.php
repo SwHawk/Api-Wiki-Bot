@@ -172,10 +172,10 @@ class Item
         }
         if (isset($item['flags'][0])) {
             foreach ($item['flags'] as $flag) {
-                if (array_key_exists($flag, Constants::$translation['item_flags']['soul_bind']))
+                if (array_key_exists($flag, Constants::$translation['item_flags']['soul_binding']))
                 {
                     $this->setSoulbind($flag);
-                } elseif (array_key_exists($flag, Constants::$translation['item_flags']['account_bind']))
+                } elseif (array_key_exists($flag, Constants::$translation['item_flags']['account_binding']))
                 {
                     $this->setAccountbind($flag);
                 }
