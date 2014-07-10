@@ -36,7 +36,7 @@ class ItemFactory
                 return new Bag($itemRaw);
             }
 
-            if (array_key_exists($itemType, Constants::$translation['item_types']['Containers'])) {
+            if (array_key_exists($itemType, Constants::$translation['item_types']['Container'])) {
                 return new Container($itemRaw);
             }
         }
