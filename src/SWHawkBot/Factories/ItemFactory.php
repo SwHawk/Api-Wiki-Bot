@@ -16,18 +16,20 @@ class ItemFactory
     {
         $itemBot = GW2ItemBot::getItemBotInstance("1", "fr");
         $itemRaw = $itemBot->getItemRaw($id);
-        if (! is_null($itemRaw)) {
-            if (isset($itemRaw[strtolower($itemRaw['type'])]['type']))
-            {
+        if (!is_null($itemRaw)) {
+            if (isset($itemRaw[strtolower($itemRaw['type'])]['type'])) {
                 $itemSpecificType = $itemRaw[strtolower($itemRaw['type'])]['type'];
-                if (array_key_exists($itemSpecificType, Constants::$translation['item_types']['Weapon'])) {
+                if (array_key_exists($itemSpecificType, Constants::$translation['item_types']['Weapon']))
+                {
                     return new Weapon($itemRaw);
                 }
 
-                if (in_array($itemSpecificType, Constants::$translation['item_types']['Armor'])) {
+                if (array_key_exists($itemSpecificType, Constants::$translation['item_types']['Armor']))
+                {
                     return new Armor($itemRaw);
                 }
-                if (in_array($itemSpecificType, Constants::$translation['item_types']['Trinket'])) {
+                if (array_key_exists($itemSpecificType, Constants::$translation['item_types']['Trinket']))
+                {
                     return new Trinket($itemRaw);
                 }
             }
