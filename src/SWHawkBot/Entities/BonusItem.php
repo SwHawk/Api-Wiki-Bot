@@ -11,7 +11,7 @@ use SWHawkBot\Constants;
  * 2 slots d'infusions ou 1 ou 2 slots de composants d'amélioration
  *
  * @author SwHawk
- *
+ *        
  *         @ORM\MappedSuperClass
  */
 class BonusItem extends Item
@@ -152,24 +152,22 @@ class BonusItem extends Item
     /**
      * Correspondances API/wiki-fr bonus
      */
-
-
+    
     /**
      * Correspondances API/wiki-fr types d'infusions
      */
-
-
+    
     /**
      * Constructeur
      *
-     * @param array|null $item
+     * @param array|null $item            
      */
     public function __construct($item = null)
     {
         parent::__construct($item);
-
+        
         $item_specific = $item[strtolower($item['type'])];
-
+        
         $item_infusion_slots = $item_specific['infusion_slots'];
         if (is_array($item_infusion_slots) && count($item_infusion_slots)) {
             foreach ($item_infusion_slots as $number => $type) {
@@ -177,7 +175,7 @@ class BonusItem extends Item
                 $this->$function($type);
             }
         }
-
+        
         $item_infix_upgrade = $item_specific['infix_upgrade'];
         if (is_array($item_infix_upgrade) && count($item_infix_upgrade)) {
             if (isset($item_infix_upgrade['buff'])) {
@@ -186,9 +184,8 @@ class BonusItem extends Item
             }
             if (isset($item_infix_upgrade['attributes']) && is_array($item_infix_upgrade['attributes']) && count($item_infix_upgrade['attributes'])) {
                 foreach ($item_infix_upgrade['attributes'] as $attribute_array) {
-                    if (array_key_exists($attribute_array['attribute'], Constants::$translation['attributes_modifier_functions']))
-                    {
-                        $function = Constants::$translation['attribute_modifier_functions'][$attribute_array['attribute']];
+                    if (array_key_exists($attribute_array['attribute'], Constants::$translation['attributes_modifier_functions'])) {
+                        $function = Constants::$translation['attributes_modifier_functions'][$attribute_array['attribute']];
                     }
                     try {
                         $this->$function($attribute_array['modifier']);
@@ -199,7 +196,7 @@ class BonusItem extends Item
                 }
             }
         }
-
+        
         if (isset($item_specific['suffix_item_id'])) {
             $this->setUpgradeComponent1Id($item_specific['suffix_item_id']);
         }
@@ -211,13 +208,12 @@ class BonusItem extends Item
 
     /**
      *
-     * @param string $type
+     * @param string $type            
      * @return BonusItem
      */
     public function setInfusionSlot1Type($type)
     {
-        if (array_key_exists($type, Constants::$translation['infusion_types']))
-        {
+        if (array_key_exists($type, Constants::$translation['infusion_types'])) {
             $this->infusionSlot1Type = Constants::$translation['infusion_types'][$type];
             return $this;
         }
@@ -227,13 +223,12 @@ class BonusItem extends Item
 
     /**
      *
-     * @param string $type
+     * @param string $type            
      * @return \SWHawkBot\Entities\BonusItem
      */
     public function setInfusionSlot2Type($type)
     {
-        if (array_key_exists($type, Constants::$translation['infusion_types']))
-        {
+        if (array_key_exists($type, Constants::$translation['infusion_types'])) {
             $this->infusionSlot2Type = Constants::$translation['infusion_types'][$type];
             return $this;
         }
@@ -243,7 +238,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier
+     * @param integer $modifier            
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -258,7 +253,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier
+     * @param integer $modifier            
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -273,7 +268,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier
+     * @param integer $modifier            
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -288,7 +283,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier
+     * @param integer $modifier            
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -303,7 +298,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier
+     * @param integer $modifier            
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -318,7 +313,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier
+     * @param integer $modifier            
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -333,7 +328,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier
+     * @param integer $modifier            
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -348,7 +343,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier
+     * @param integer $modifier            
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -363,7 +358,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier
+     * @param integer $modifier            
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -378,7 +373,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier
+     * @param integer $modifier            
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -390,7 +385,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier
+     * @param integer $modifier            
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -405,7 +400,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier
+     * @param integer $modifier            
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
