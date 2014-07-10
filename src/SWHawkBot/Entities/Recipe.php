@@ -228,7 +228,6 @@ class Recipe
         }
 
         if (isset($recipe['output_item_id'], $recipe['type'])) {
-            $this->setOutputItemId($recipe['output_item_id'], $recipe['type']);
             $this->setOutputItem($recipe['output_item_id']);
         }
 
