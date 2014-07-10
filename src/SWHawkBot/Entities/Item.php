@@ -10,7 +10,7 @@ use SWHawkBot\Constants;
  * ne sera pas persisté en base de donnée
  *
  * @author SwHawk
- *
+ *        
  *         @ORM\MappedSuperClass
  */
 class Item
@@ -131,16 +131,17 @@ class Item
     protected $iconFileSignature;
 
     /**
-     * Correspondance entre les liaisons (à l'âme, au compte) renvoyée par l'API
-     * et leur équivalent sur le wiki français
+     * Tableau JSON de l'objet renvoyé par l'API
+     *
+     * @var array
      */
-
+    protected $itemRaw;
 
     /**
      * Constructeur de l'objet, possiblement à partir d'un array
      * provenant de l'API GuildWars2
      *
-     * @param array $item|null
+     * @param array $item|null            
      * @return Item
      */
     public function __construct($item = null)
@@ -148,7 +149,7 @@ class Item
         if (is_null($item)) {
             return $this;
         }
-
+        
         if (isset($item['item_id'])) {
             $this->setGw2apiId($item['item_id']);
         }
@@ -172,28 +173,26 @@ class Item
         }
         if (isset($item['flags'][0])) {
             foreach ($item['flags'] as $flag) {
-                if (array_key_exists($flag, Constants::$translation['item_flags']['soul_binding']))
-                {
+                if (array_key_exists($flag, Constants::$translation['item_flags']['soul_binding'])) {
                     $this->setSoulbind($flag);
-                } elseif (array_key_exists($flag, Constants::$translation['item_flags']['account_binding']))
-                {
+                } elseif (array_key_exists($flag, Constants::$translation['item_flags']['account_binding'])) {
                     $this->setAccountbind($flag);
                 }
             }
         }
-
+        
         if (isset($item['icon_file_id'])) {
             $this->setIconFileId($item['icon_file_id']);
             $this->setIconFileSignature($item['icon_file_signature']);
         }
-
-        $this->raw = $item;
+        
+        $this->itemRaw = $item;
         return $this;
     }
 
     /**
      *
-     * @param int $id
+     * @param int $id            
      * @throws \InvalidArgumentException
      * @return Item
      */
@@ -208,7 +207,7 @@ class Item
 
     /**
      *
-     * @param string $name
+     * @param string $name            
      * @return Item
      */
     public function setName($name)
@@ -219,7 +218,7 @@ class Item
 
     /**
      *
-     * @param string $description
+     * @param string $description            
      * @return Item
      */
     public function setDescription($description)
@@ -230,7 +229,7 @@ class Item
 
     /**
      *
-     * @param string $type
+     * @param string $type            
      * @return Item
      */
     public function setType($type)
@@ -241,7 +240,7 @@ class Item
 
     /**
      *
-     * @param int $level
+     * @param int $level            
      * @throws \InvalidArgumentException
      * @return Item
      */
@@ -256,13 +255,12 @@ class Item
 
     /**
      *
-     * @param string $rarity
+     * @param string $rarity            
      * @return Item
      */
     public function setRarity($rarity)
     {
-        if (array_key_exists($rarity, Constants::$translation['rarity']))
-        {
+        if (array_key_exists($rarity, Constants::$translation['rarity'])) {
             $this->rarity = Constants::$translation['rarity'][$rarity];
             return $this;
         }
@@ -270,7 +268,7 @@ class Item
 
     /**
      *
-     * @param int $vendor_value
+     * @param int $vendor_value            
      * @throws \InvalidArgumentException
      * @return Item
      */
@@ -285,35 +283,33 @@ class Item
 
     /**
      *
-     * @param string $soulbind
+     * @param string $soulbind            
      * @return Item
      */
     public function setSoulbind($soulbind)
     {
-        if (array_key_exists($soulbind, Constants::$translation['item_flags']['soul_bind']))
-        {
-            $this->soulbind = Constants::$translation['item_flags']['soul_bind'][$soulbind];
+        if (array_key_exists($soulbind, Constants::$translation['item_flags']['soul_binding'])) {
+            $this->soulbind = Constants::$translation['item_flags']['soul_binding'][$soulbind];
             return $this;
         }
     }
 
     /**
      *
-     * @param string $accountbind
+     * @param string $accountbind            
      * @return Item
      */
     public function setAccountbind($accountbind)
     {
-    if (array_key_exists($soulbind, Constants::$translation['item_flags']['account_bind']))
-        {
-            $this->accountbind = Constants::$translation['item_flags']['account_bind'][$accountbind];
+        if (array_key_exists($soulbind, Constants::$translation['item_flags']['account_binding'])) {
+            $this->accountbind = Constants::$translation['item_flags']['account_binding'][$accountbind];
             return $this;
         }
     }
 
     /**
      *
-     * @param int $id
+     * @param int $id            
      * @throws \InvalidArgumentException
      * @return Item
      */
@@ -328,7 +324,7 @@ class Item
 
     /**
      *
-     * @param string $signature
+     * @param string $signature            
      * @return \SWHawkBot\Entities\Item
      */
     public function setIconFileSignature($signature)
@@ -431,9 +427,9 @@ class Item
      *
      * @return string
      */
-    public function getRaw()
+    public function getItemRaw()
     {
-        return $this->raw;
+        return $this->itemRaw;
     }
 
     /**
@@ -453,7 +449,6 @@ class Item
     {
         return $this->iconFileSignature;
     }
-
 }
 
 ?>
