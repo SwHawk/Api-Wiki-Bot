@@ -2,6 +2,7 @@
 namespace SWHawkBot\GW2ApiBot;
 
 use GuzzleHttp\Client;
+use SWHawkBot\Factories\ItemFactory;
 
 /**
  * Classe du bot communicant avec l'API des objets de GuildWars2,
@@ -36,7 +37,7 @@ class GW2ItemBot extends GW2ApiBot
     /**
      * Liste des identifiants des objets de l'API GuildWars2
      *
-     * @var array:integer
+     * @var int[]
      */
     protected static $item_ids;
 
@@ -65,17 +66,17 @@ class GW2ItemBot extends GW2ApiBot
             $lang = "fr";
         }
         $this->lang = $lang;
-        
+
         $url = parent::BASE_URL . $this->version . "/";
-        
+
         $this->client_list = new Client(array(
             'base_url' => $url . self::ITEMS_JSON
         ));
-        
+
         $this->client_details = new Client(array(
             'base_url' => $url . self::ITEM_DETAILS_JSON
         ));
-        
+
         self::$item_ids = $this->getItemIds();
     }
 
@@ -83,7 +84,7 @@ class GW2ItemBot extends GW2ApiBot
      * Permet la récupération de la liste des identifiants des objets
      * de l'API GuildWars2
      *
-     * @return array:integer
+     * @return int[]
      */
     public function getItemIds()
     {
@@ -94,7 +95,7 @@ class GW2ItemBot extends GW2ApiBot
      * Détermine si un objet existe dans l'API GuildWars2 grâce
      * à la liste des identifiants
      *
-     * @param integer $id            
+     * @param integer $id
      * @return boolean
      */
     public function isValidItemId($id)
@@ -102,7 +103,7 @@ class GW2ItemBot extends GW2ApiBot
         if (! is_numeric($id)) {
             return false;
         }
-        
+
         return (bool) in_array($id, self::$item_ids);
     }
 
@@ -110,7 +111,7 @@ class GW2ItemBot extends GW2ApiBot
      * Retourne le tableau JSON de l'objet renvoyé par l'API
      * GuildWars2
      *
-     * @param integer $id            
+     * @param integer $id
      * @return array|null
      */
     public function getItemRaw($id)
@@ -127,10 +128,19 @@ class GW2ItemBot extends GW2ApiBot
     }
 
     /**
+     * @TODO Fonction retournant une instance de l'objet recherché
+     * grâce à la classe ItemFactory
+     */
+    public function getItem($id)
+    {
+
+    }
+
+    /**
      * Retourne l'instance du singleton
      *
-     * @param string $version            
-     * @param string $lang            
+     * @param string $version
+     * @param string $lang
      * @return GW2ItemBot
      */
     public static function getItemBotInstance($version, $lang)
