@@ -186,7 +186,7 @@ class BonusItem extends Item
             }
             if (isset($item_infix_upgrade['attributes']) && is_array($item_infix_upgrade['attributes']) && count($item_infix_upgrade['attributes'])) {
                 foreach ($item_infix_upgrade['attributes'] as $attribute_array) {
-                    if (array_key_exists($attribute_array['attribute'], Constants::$translation['attribute_modifier_functions']))
+                    if (array_key_exists($attribute_array['attribute'], Constants::$translation['attributes_modifier_functions']))
                     {
                         $function = Constants::$translation['attribute_modifier_functions'][$attribute_array['attribute']];
                     }
