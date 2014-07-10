@@ -244,9 +244,9 @@ class Recipe
         }
 
         if (isset($recipe['flags'][0])) {
-            $this->setDiscovery($recipe['flags'][0], $recipe['type']);
+            $this->setDiscovery($recipe['flags'][0], $this->getType());
         } else {
-            $this->setDiscovery(null, $recipe['type']);
+            $this->setDiscovery(null, $this->getType());
         }
 
         if (isset($recipe['ingredients'])) {
@@ -416,20 +416,21 @@ class Recipe
      */
     public function setDiscovery($type, $discovery = null)
     {
-        if ($discovery == self::API_RECIPE_AUTO_LEARNED) {
-            $this->discovery = self::RECIPE_AUTO_LEARNED;
+        if ($discovery == Constants::$translation['recipe_discovery']['API_strings']['APIAutoLearned']) {
+            $this->discovery = Constants::$translation['recipe_discovery'][$discovery];
             return $this;
         }
-        if ($discovery == self::API_RECIPE_BOUGHT) {
-            if ($type == self::API_TYPE_BULK || $type == self::API_TYPE_FEAST) {
-                $this->discovery = self::RECIPE_MYSTICAL;
+        if ($discovery == Constants::$translation['recipe_discovery']['API_strings']['APILearnedFromItem']) {
+            if ($type == Constants::$translation['recipe_types']['Bulk'] ||
+                $type == Constants::$translation['recipe_types']['Feast']) {
+                $this->discovery = Constants::$translation['recipe_discovery']['Mystical'];
                 return $this;
             } else {
-                $this->discovery = self::RECIPE_BOUGHT;
+                $this->discovery = Constants::$translation['recipe_discovery'][$discovery];
                 return $this;
             }
         } else {
-            $this->discovery = self::RECIPE_DISCOVERED;
+            $this->discovery = Constants::$translation['recipe_discovery']['Discovered'];
             return $this;
         }
     }
@@ -562,29 +563,9 @@ class Recipe
     public function setDisciplines($disciplines)
     {
         foreach ($disciplines as &$discipline) {
-            if ($discipline == self::API_DISCIPLINE_ARMORSMITH || $discipline == self::DISCIPLINE_ARMORSMITH) {
-                $discipline = self::DISCIPLINE_ARMORSMITH;
-            }
-            if ($discipline == self::API_DISCIPLINE_ARTIFICER || $discipline == self::DISCIPLINE_ARTIFICER) {
-                $discipline = self::DISCIPLINE_ARTIFICER;
-            }
-            if ($discipline == self::API_DISCIPLINE_CHEF || $discipline == self::DISCIPLINE_CHEF) {
-                $discipline = self::DISCIPLINE_CHEF;
-            }
-            if ($discipline == self::API_DISCIPLINE_HUNTSMAN || $discipline == self::DISCIPLINE_HUNTSMAN) {
-                $discipline = self::DISCIPLINE_HUNTSMAN;
-            }
-            if ($discipline == self::API_DISCIPLINE_JEWELER || $discipline == self::DISCIPLINE_JEWELER) {
-                $discipline = self::DISCIPLINE_JEWELER;
-            }
-            if ($discipline == self::API_DISCIPLINE_LEATHERWORKER || $discipline == self::DISCIPLINE_LEATHERWORKER) {
-                $discipline = self::DISCIPLINE_LEATHERWORKER;
-            }
-            if ($discipline == self::API_DISCIPLINE_TAILOR || $discipline == self::DISCIPLINE_TAILOR) {
-                $discipline = self::DISCIPLINE_TAILOR;
-            }
-            if ($discipline == self::API_DISCIPLINE_WEAPONSMITH || $discipline == self::DISCIPLINE_WEAPONSMITH) {
-                $discipline = self::DISCIPLINE_WEAPONSMITH;
+            if (array_key_exists($discipline, Constants::$translation['crafting_disciplines']))
+            {
+                $discipline = Constants::$translation['crafting_disciplines'][$discipline];
             }
         }
         $this->disciplines = implode(", ", $disciplines);
