@@ -17,58 +17,27 @@ class ItemFactory
         $itemBot = GW2ItemBot::getItemBotInstance("1", "fr");
         $itemRaw = $itemBot->getItemRaw($id);
         if (! is_null($itemRaw)) {
-            $itemSpecificType = $itemRaw[strtolower($itemRaw['type'])]['type'];
-            if (in_array($itemSpecificType, array(
-                Constants::API_WEAPON_TYPE_AXE,
-                Constants::API_WEAPON_TYPE_DAGGER,
-                Constants::API_WEAPON_TYPE_FOCUS,
-                Constants::API_WEAPON_TYPE_GREATSWORD,
-                Constants::API_WEAPON_TYPE_HAMMER,
-                Constants::API_WEAPON_TYPE_HARPOON,
-                Constants::API_WEAPON_TYPE_LONGBOW,
-                Constants::API_WEAPON_TYPE_MACE,
-                Constants::API_WEAPON_TYPE_PISTOL,
-                Constants::API_WEAPON_TYPE_RIFLE,
-                Constants::API_WEAPON_TYPE_SCEPTER,
-                Constants::API_WEAPON_TYPE_SHIELD,
-                Constants::API_WEAPON_TYPE_SHORTBOW,
-                Constants::API_WEAPON_TYPE_SPEARGUN,
-                Constants::API_WEAPON_TYPE_STAFF,
-                Constants::API_WEAPON_TYPE_SWORD,
-                Constants::API_WEAPON_TYPE_TORCH,
-                Constants::API_WEAPON_TYPE_TRIDENT,
-                Constants::API_WEAPON_TYPE_WARHORN
-            ))) {
-                return new Weapon($itemRaw);
+            if (isset($itemRaw[strtolower($itemRaw['type'])]['type']))
+            {
+                $itemSpecificType = $itemRaw[strtolower($itemRaw['type'])]['type'];
+                if (array_key_exists($itemSpecificType, Constants::$translation['item_types']['Weapon'])) {
+                    return new Weapon($itemRaw);
+                }
+
+                if (in_array($itemSpecificType, Constants::$translation['item_types']['Armor'])) {
+                    return new Armor($itemRaw);
+                }
+                if (in_array($itemSpecificType, Constants::$translation['item_types']['Trinket'])) {
+                    return new Trinket($itemRaw);
+                }
             }
-            
-            if (in_array($itemSpecificType, array(
-                Constants::API_ARMOR_TYPE_BOOTS,
-                Constants::API_ARMOR_TYPE_COAT,
-                Constants::API_ARMOR_TYPE_GLOVES,
-                Constants::API_ARMOR_TYPE_HELM,
-                Constants::API_ARMOR_TYPE_HELMAQUATIC,
-                Constants::API_ARMOR_TYPE_LEGGINGS,
-                Constants::API_ARMOR_TYPE_SHOULDERS
-            ))) {
-                return new Armor($itemRaw);
-            }
-            
-            if ($itemSpecificType == Constants::API_TYPE_BAG) {
+            $itemType = $itemRaw['type'];
+            if (array_key_exists($itemType, Constants::$translation['item_types']['Bag'])) {
                 return new Bag($itemRaw);
             }
-            
-            if ($itemSpecificType == Constants::API_TYPE_BULK) {
+
+            if (array_key_exists($itemType, Constants::$translation['item_types']['Containers'])) {
                 return new Container($itemRaw);
-            }
-            
-            if (in_array($itemSpecificType, array(
-                Constants::API_TRINKET_TYPE_AMULET,
-                Constants::API_TRINKET_TYPE_EARRING,
-                Constants::API_TRINKET_TYPE_RING,
-                Constants::API_TRINKET_TYPE_TRINKET
-            ))) {
-                return new Trinket($itemRaw);
             }
         }
     }
