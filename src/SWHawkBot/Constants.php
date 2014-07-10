@@ -73,6 +73,10 @@ abstract class Constants
             "UpgradeComponent" => "Composant d'amélioration"
         ),
         'recipe_discovery' => array(
+            "API_strings" => array(
+                "APIAutoLearned" => "AutoLearned",
+                "APILearnedFromItem" => "LearnedFromItem"
+            ),
             "AutoLearned" => "Automatique",
             "LearnedFromItem" => "Achetable",
             "Discovered" => "Découverte",
