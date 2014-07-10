@@ -2,6 +2,7 @@
 namespace SWHawkBot\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
+use SWHawkBot\Constants;
 
 /**
  * Cette classe *abstraite* représente un objet du jeu donnant des bonus aux
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * 2 slots d'infusions ou 1 ou 2 slots de composants d'amélioration
  *
  * @author SwHawk
- *        
+ *
  *         @ORM\MappedSuperClass
  */
 class BonusItem extends Item
@@ -151,60 +152,24 @@ class BonusItem extends Item
     /**
      * Correspondances API/wiki-fr bonus
      */
-    const API_TYPE_CONDITION_DAMAGE = "ConditionDamage";
 
-    const TYPE_CONDITION_DAMAGE = "setDegatsAlterationModifier";
-
-    const API_TYPE_CRITICAL_DAMAGE = "CritDamage";
-
-    const TYPE_CRITICAL_DAMAGE = "setFerociteModifier";
-
-    const API_TYPE_HEALING = "Healing";
-
-    const TYPE_HEALING = "setGuerisonModifier";
-
-    const API_TYPE_POWER = "Power";
-
-    const TYPE_POWER = "setPuissanceModifier";
-
-    const API_TYPE_PRECISION = "Precision";
-
-    const TYPE_PRECISION = "setPrecisionModifier";
-
-    const API_TYPE_TOUGHNESS = "Toughness";
-
-    const TYPE_TOUGHNESS = "setRobustesseModifier";
-
-    const API_TYPE_VITALITY = "Vitality";
-
-    const TYPE_VITALITY = "setVitaliteModifier";
 
     /**
      * Correspondances API/wiki-fr types d'infusions
      */
-    const API_TYPE_DEFENSE = "Defense";
 
-    const TYPE_DEFENSE = "Défensive";
-
-    const API_TYPE_OFFENSE = "Offense";
-
-    const TYPE_OFFENSE = "Offensive";
-
-    const API_TYPE_UTILITARY = "Utilitary";
-
-    const TYPE_UTILITARY = "Utilitaire";
 
     /**
      * Constructeur
      *
-     * @param array|null $item            
+     * @param array|null $item
      */
     public function __construct($item = null)
     {
         parent::__construct($item);
-        
+
         $item_specific = $item[strtolower($item['type'])];
-        
+
         $item_infusion_slots = $item_specific['infusion_slots'];
         if (is_array($item_infusion_slots) && count($item_infusion_slots)) {
             foreach ($item_infusion_slots as $number => $type) {
@@ -212,7 +177,7 @@ class BonusItem extends Item
                 $this->$function($type);
             }
         }
-        
+
         $item_infix_upgrade = $item_specific['infix_upgrade'];
         if (is_array($item_infix_upgrade) && count($item_infix_upgrade)) {
             if (isset($item_infix_upgrade['buff'])) {
@@ -221,26 +186,9 @@ class BonusItem extends Item
             }
             if (isset($item_infix_upgrade['attributes']) && is_array($item_infix_upgrade['attributes']) && count($item_infix_upgrade['attributes'])) {
                 foreach ($item_infix_upgrade['attributes'] as $attribute_array) {
-                    if ($attribute_array['attribute'] == self::API_TYPE_CONDITION_DAMAGE) {
-                        $function = self::TYPE_CONDITION_DAMAGE;
-                    }
-                    if ($attribute_array['attribute'] == self::API_TYPE_CRITICAL_DAMAGE) {
-                        $function = self::TYPE_CRITICAL_DAMAGE;
-                    }
-                    if ($attribute_array['attribute'] == self::API_TYPE_HEALING) {
-                        $function = self::TYPE_HEALING;
-                    }
-                    if ($attribute_array['attribute'] == self::API_TYPE_POWER) {
-                        $function = self::TYPE_POWER;
-                    }
-                    if ($attribute_array['attribute'] == self::API_TYPE_PRECISION) {
-                        $function = self::TYPE_PRECISION;
-                    }
-                    if ($attribute_array['attribute'] == self::API_TYPE_TOUGHNESS) {
-                        $function = self::TYPE_TOUGHNESS;
-                    }
-                    if ($attribute_array['attribute'] == self::API_TYPE_VITALITY) {
-                        $function = self::TYPE_VITALITY;
+                    if (array_key_exists($attribute_array['attribute'], Constants::$translation['attribute_modifier_functions']))
+                    {
+                        $function = Constants::$translation['attribute_modifier_functions'][$attribute_array['attribute']];
                     }
                     try {
                         $this->$function($attribute_array['modifier']);
@@ -251,7 +199,7 @@ class BonusItem extends Item
                 }
             }
         }
-        
+
         if (isset($item_specific['suffix_item_id'])) {
             $this->setUpgradeComponent1Id($item_specific['suffix_item_id']);
         }
@@ -263,47 +211,39 @@ class BonusItem extends Item
 
     /**
      *
-     * @param string $type            
+     * @param string $type
      * @return BonusItem
      */
     public function setInfusionSlot1Type($type)
     {
-        if ($type == self::API_TYPE_DEFENSE) {
-            $this->infusionSlot1Type = self::TYPE_DEFENSE;
+        if (array_key_exists($type, Constants::$translation['infusion_types']))
+        {
+            $this->infusionSlot1Type = Constants::$translation['infusion_types'][$type];
             return $this;
         }
-        if ($type == self::API_TYPE_OFFENSE) {
-            $this->infusionSlot1Type = self::TYPE_DEFENSE;
-            return $this;
-        }
-        if ($type == self::API_TYPE_UTILITARY) {
-            $this->infusionSlot1Type = self::TYPE_UTILITARY;
-        }
+        $this->infusionSlot1Type = $type;
+        return $this;
     }
 
     /**
      *
-     * @param string $type            
+     * @param string $type
      * @return \SWHawkBot\Entities\BonusItem
      */
     public function setInfusionSlot2Type($type)
     {
-        if ($type == self::API_TYPE_DEFENSE) {
-            $this->infusionSlot2Type = self::TYPE_DEFENSE;
+        if (array_key_exists($type, Constants::$translation['infusion_types']))
+        {
+            $this->infusionSlot2Type = Constants::$translation['infusion_types'][$type];
             return $this;
         }
-        if ($type == self::API_TYPE_OFFENSE) {
-            $this->infusionSlot2Type = self::TYPE_DEFENSE;
-            return $this;
-        }
-        if ($type == self::API_TYPE_UTILITARY) {
-            $this->infusionSlot2Type = self::TYPE_UTILITARY;
-        }
+        $this->infusionSlot2Type = $type;
+        return $this;
     }
 
     /**
      *
-     * @param integer $modifier            
+     * @param integer $modifier
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -318,7 +258,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier            
+     * @param integer $modifier
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -333,7 +273,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier            
+     * @param integer $modifier
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -348,7 +288,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier            
+     * @param integer $modifier
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -363,7 +303,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier            
+     * @param integer $modifier
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -378,7 +318,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier            
+     * @param integer $modifier
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -393,7 +333,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier            
+     * @param integer $modifier
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -408,7 +348,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier            
+     * @param integer $modifier
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -423,7 +363,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier            
+     * @param integer $modifier
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -438,7 +378,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier            
+     * @param integer $modifier
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -450,7 +390,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier            
+     * @param integer $modifier
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
@@ -465,7 +405,7 @@ class BonusItem extends Item
 
     /**
      *
-     * @param integer $modifier            
+     * @param integer $modifier
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
