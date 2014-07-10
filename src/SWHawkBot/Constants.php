@@ -64,6 +64,8 @@ abstract class Constants
              * d'artisanat
              */
             "Component" => "Composant d'artisanat",
+            "Inscription" => "Inscription",
+            "Insignia" => "Insigne",
             "Potion" => "Potion",
             "Refinement" => "Rafinnage",
             "RefinementEctoplasm" => "Raffinage d'ectoplasme",
@@ -122,7 +124,15 @@ abstract class Constants
                 "Leggings" => "Jambière",
                 "Shoulders" => "Epaulière"
             ),
-            "Bag" => "Sac",
+            "Trinket" => array(
+                "Amulet" => "Amulette",
+                "Earring" => "Accessoire",
+                "Ring" => "Anneau",
+                "Trinket" => "Accessoire"
+            ),
+            "Bag" => array(
+                "Bag" => "Sac",
+            ),
             "Consumable" => array(
                 "Food" => "Nourriture",
                 "Generic" => "Consommable",
@@ -131,9 +141,11 @@ abstract class Constants
                     "CraftingRecipe" => "Recette"
                 )
             ),
-            "Container" => "Conteneur"
+            "Container" => array(
+                "Container" => "Conteneur"
+            )
         ),
-        'rarity' => array(
+        "rarity" => array(
             "Junk" => "Déchet",
             "Basic" => "Simple",
             "Fine" => "Raffiné",
@@ -142,6 +154,96 @@ abstract class Constants
             "Exotic" => "Exotique",
             "Ascended" => "Elevé",
             "Legendary" => "Légendaire"
+        ),
+        "damage_types" => array(
+            "Choking" => "Ténèbres",
+            "Fire" => "Feu",
+            "Ice" => "Glace",
+            "Lightning" => "Air",
+            "Physical" => "Physique"
+        ),
+        "infusion_types" => array(
+            "Defense" => "Défensive",
+            "Offense" => "Offensive",
+            "Utilitary" => "Utilitaire"
+        ),
+        "attributes_modifier_functions" => array(
+            "ConditionDamage" => "setDegatsAlterationModifier",
+            "CritDamage" => "setFerociteModifier",
+            "Healing" => "setGuerisonModifier",
+            "Power" => "setPuissanceModifier",
+            "Precision" => "setPrecisionModifier",
+            "Toughness" => "setRobustesseModifier",
+            "Vitality" => "setVitaliteModifier"
+        ),
+        "item_flags" => array(
+            "soul_binding" => array (
+                "SoulBindOnUse" => "Utilisation",
+                "SoulBindOnAcquire" => "Acquisition",
+                "SoulBind" => "Ame"
+            ),
+            "account_binding" => array(
+                "AccountBound" => "Oui",
+                "AccountBindOnUse" => "cu",
+                "AccountBindOnAcquire" => "ca"
+            )
+        )
+    );
+
+    public static $types = array(
+        "Weapons" => array(
+            "Axe",
+            "Dagger",
+            "Focus",
+            "Greatsword",
+            "Hammer",
+            "Harpoon",
+            "Longbow",
+            "Mace",
+            "Pistol",
+            "Rifle",
+            "Scepter",
+            "Shield",
+            "Shortbow",
+            "Speargun",
+            "Staff",
+            "Sword",
+            "Torch",
+            "Trident",
+            "Warhorn"
+        ),
+        "Armors" => array(
+            "Boots",
+            "Coat",
+            "Gloves",
+            "Helm",
+            "HelmAquatic",
+            "Leggings",
+            "Shoulders"
+        ),
+        "Trinkets" => array(
+            "Amulet",
+            "Earring",
+            "Ring",
+            "Trinket"
+        ),
+        "Bags" => array(
+            "Bag"
+        ),
+        "Containers" => array(
+            "Containers"
+        ),
+        "Backpacks" => array(
+            "Backpack"
+        ),
+        "CrafintMaterials" => array(
+            "Component" => "Composant d'artisanat",
+            "Inscription" => "Inscription",
+            "Insignia" => "Insigne",
+            "UpgradeComponent" => "Composant d'amélioration"
+
         )
     );
 }
+
+?>
