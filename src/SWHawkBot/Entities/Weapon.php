@@ -9,7 +9,7 @@ use SWHawkBot\Constants;
  *
  * @author SwHawk
  *
- *         @ORM\Entity @ORM\Table(name="Weapons", indexes={@ORM\Index(name="gw2apiid_idx",columns={"gw2apiId"})})
+ *         @ORM\Entity @ORM\Table(name="Weapons")
  */
 class Weapon extends BonusItem
 {
