@@ -9,7 +9,8 @@ use SWHawkBot\Constants;
  *
  * @author SwHawk
  *
- *         @ORM\Entity @ORM\Table(name="Armorpieces")
+ *         @ORM\Entity
+ *         @ORM\Table(name="Armorpieces")
  */
 class Armor extends BonusItem
 {
