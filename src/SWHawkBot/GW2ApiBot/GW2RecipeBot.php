@@ -1,7 +1,11 @@
 <?php
 namespace SWHawkBot\GW2ApiBot;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as G4Client;
+use Guzzle\Http\Client as G3Client;
+use Doctrine\Common\Cache\MemcachedCache;
+use Guzzle\Plugin\Cache\CachePlugin;
+use Guzzle\Cache\DoctrineCacheAdapter;
 
 /**
  * Classe du bot communicant avec l'API des recettes
@@ -23,7 +27,7 @@ class GW2RecipeBot extends GW2ApiBot
      * Client Guzzle pour obtenir la liste des identifiants
      * des recettes
      *
-     * @var \GuzzleHttp\Client
+     * @var G4Client|G3Client
      */
     protected $client_list;
 
@@ -31,7 +35,7 @@ class GW2RecipeBot extends GW2ApiBot
      * Client Guzzle pour obtenir des informations concernant
      * une recette particulière
      *
-     * @var \GuzzleHttp\Client
+     * @var G4Client|G3Client
      */
     protected $client_details;
 
@@ -61,8 +65,8 @@ class GW2RecipeBot extends GW2ApiBot
     /**
      * Constructeur du singleton
      *
-     * @param int $version            
-     * @param string $lang            
+     * @param int $version
+     * @param string $lang
      */
     private function __construct($version = parent::DFLT_VERSION, $lang = parent::DFLT_LANG)
     {
@@ -74,17 +78,72 @@ class GW2RecipeBot extends GW2ApiBot
             $lang = "fr";
         }
         $this->lang = "fr";
-        
+
         $url = parent::BASE_URL . $this->version . "/";
-        
-        $this->client_list = new Client(array(
-            'base_url' => $url . self::RECIPE_JSON
-        ));
-        $this->client_details = new Client(array(
-            'base_url' => $url . self::RECIPE_DETAILS_JSON
-        ));
-        
+
+        if ($gversion = 3 || $gversion = 4)
+        {
+            $this->setGuzzleVersion($gversion);
+        } else {
+            $this->setGuzzleVersion(self::DFLT_GUZZLE_VERSION);
+        }
+
+        if ($this->getGuzzleVersion() = 4)
+        {
+            $this->client_list = new G4Client(array(
+                'base_url' => $url . self::RECIPE_JSON
+            ));
+            $this->client_details = new G4Client(array(
+                'base_url' => $url . self::RECIPE_DETAILS_JSON,
+                'defaults' => array(
+                    'query' => array(
+                        'lang' => $this->lang
+                    )
+                )
+            ));
+        } elseif ($this->getGuzzleVersion() = 3)
+        {
+            $memcached = new \Memcached();
+
+            $memcached->addServer('127.0.0.1',11211);
+
+            $cacheBackend = new MemcachedCache();
+            $cacheBackend->setMemcached($memcached);
+
+            $cachePlugin = new CachePlugin(new DoctrineCacheAdapter($cacheBackend));
+
+
+            $this->client_list = new G3Client($url . self::RECIPE_JSON, array(
+                'request.options' => array(
+                    'plugins' => array(
+                        $cachePlugin
+                    )
+                )
+            ));
+
+            $this->client_details = new G3Client($url . self::RECIPE_DETAILS_JSON, array(
+                'request.options' => array(
+                    'query' => array(
+                        'lang' => $this->lang
+                    ),
+                    'plugins' => array(
+                        $cachePlugin
+                    )
+                )
+            ));
+        }
+
         self::$recipes_id = $this->getRecipesIds();
+    }
+
+    private function setGuzzleVersion($version)
+    {
+        $this->guzzleVersion = $version;
+    }
+
+    private function getGuzzleVersion()
+    {
+        return $this->guzzleVersion;
     }
 
     /**
@@ -95,14 +154,20 @@ class GW2RecipeBot extends GW2ApiBot
      */
     public function getRecipesIds()
     {
-        return $this->client_list->get()->json()['recipes'];
+        if ($this->getGuzzleVersion() = 4)
+        {
+            return $this->client_list->get()->json()['recipes'];
+        } elseif ($this->getGuzzleVersion() = 3)
+        {
+            return $this->client_list->get()->send()->json()['recipes'];
+        }
     }
 
     /**
      * Détermine si une recette existe dans l'API GuildWars2 grâce
      * à la liste des identifiants
      *
-     * @param integer $id            
+     * @param integer $id
      * @return boolean
      */
     public function isValidRecipeId($id)
@@ -117,7 +182,7 @@ class GW2RecipeBot extends GW2ApiBot
      * Retourne le tableau JSON de la recette renvoyé par l'API
      * GuildWars2
      *
-     * @param integer $id            
+     * @param integer $id
      * @return array|null
      */
     public function getRecipeRaw($id)
@@ -125,18 +190,26 @@ class GW2RecipeBot extends GW2ApiBot
         if (! $this->isValidRecipeId($id)) {
             return null;
         }
-        $request = $this->client_details->createRequest('GET');
-        $request->getQuery()
-            ->set('recipe_id', $id)
-            ->set('lang', $this->lang);
-        return $this->client_details->send($request)->json();
+        if ($this->getGuzzleVersion() = 4)
+        {
+            $request = $this->client_details->createRequest('GET');
+            $request->getQuery()
+                ->set('recipe_id', $id);
+            return $this->client_details->send($request)->json();
+        } elseif ($this->getGuzzleVersion() = 3)
+        {
+            $request = $this->client_details->get();
+            $request->getQuery->set('recipe_id', $id);
+            return $request->send()->json();
+        }
+
     }
 
     /**
      * Retourne l'instance du singleton
      *
-     * @param string $version            
-     * @param string $lang            
+     * @param string $version
+     * @param string $lang
      * @return \SWHawkBot\GW2ApiBot\GW2RecipeBot
      */
     public static function getInstance($version = null, $lang = null)

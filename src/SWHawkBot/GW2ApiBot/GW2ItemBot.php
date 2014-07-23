@@ -1,8 +1,12 @@
 <?php
 namespace SWHawkBot\GW2ApiBot;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as G4Client;
+use Guzzle\Http\Client as G3Client;
 use SWHawkBot\Factories\ItemFactory;
+use Doctrine\Common\Cache\MemcachedCache;
+use Guzzle\Plugin\Cache\CachePlugin;
+use Guzzle\Cache\DoctrineCacheAdapter;
 
 /**
  * Classe du bot communicant avec l'API des objets de GuildWars2,
@@ -23,14 +27,14 @@ class GW2ItemBot extends GW2ApiBot
     /**
      * Client Guzzle pour obtenir la liste des identifiants d'objets
      *
-     * @var \GuzzleHttp\Client
+     * @var G4Client|G3Client
      */
     protected $client_list;
 
     /**
      * Client Guzzle pour obtenir les informations sur un objet
      *
-     * @var \GuzzleHttp\Client
+     * @var G4Client|G3Client
      */
     protected $client_details;
 
@@ -56,7 +60,7 @@ class GW2ItemBot extends GW2ApiBot
      */
     const ITEM_DETAILS_JSON = "item_details.json";
 
-    private function __construct($version = parent::DFLT_VERSION, $lang = parent::DFLT_LANG)
+    private function __construct($version = parent::DFLT_VERSION, $lang = parent::DFLT_LANG, $gversion = parent::DFLT_GUZZLE_VERSION)
     {
         if (is_numeric($version)) {
             $version = "v" . $version;
@@ -69,15 +73,70 @@ class GW2ItemBot extends GW2ApiBot
 
         $url = parent::BASE_URL . $this->version . "/";
 
-        $this->client_list = new Client(array(
-            'base_url' => $url . self::ITEMS_JSON
-        ));
+        if ($gversion = 3 || $gversion = 4)
+        {
+            $this->setGuzzleVersion($gversion);
+        } else {
+            $this->setGuzzleVersion(self::DFLT_GUZZLE_VERSION);
+        }
 
-        $this->client_details = new Client(array(
-            'base_url' => $url . self::ITEM_DETAILS_JSON
-        ));
+        if ($this->getGuzzleVersion() = 4)
+        {
+            $this->client_list = new G4Client(array(
+                'base_url' => $url . self::ITEMS_JSON
+            ));
+
+            $this->client_details = new G4Client(array(
+                'base_url' => $url . self::ITEM_DETAILS_JSON,
+                'defaults' => array(
+                    'query' => array(
+                        'lang' => $this->lang
+                    )
+                )
+            ));
+        } else {
+
+            $memcached = new \Memcached();
+
+            $memcached->addServer('127.0.0.1',11211);
+
+            $cacheBackend = new MemcachedCache();
+            $cacheBackend->setMemcached($memcached);
+
+            $cachePlugin = new CachePlugin(new DoctrineCacheAdapter($cacheBackend));
+
+
+            $this->client_list = new G3Client($url . self::ITEMS_JSON, array(
+                'request.options' => array(
+                    'plugins' => array(
+                        $cachePlugin
+                    )
+                )
+            ));
+
+            $this->client_details = new G3Client($url . self::ITEMS_JSON, array(
+                'request.options' => array(
+                    'query' => array(
+                        'lang' => $this->lang
+                    ),
+                    'plugins' => array(
+                        $cachePlugin
+                    )
+                )
+            ));
+        }
 
         self::$item_ids = $this->getItemIds();
+    }
+
+    private function setGuzzleVersion($version)
+    {
+        $this->guzzleVersion = $version;
+    }
+
+    private function getGuzzleVersion()
+    {
+        return $this->guzzleVersion;
     }
 
     /**
@@ -88,7 +147,13 @@ class GW2ItemBot extends GW2ApiBot
      */
     public function getItemIds()
     {
-        return $this->client_list->get()->json()['items'];
+        if ($this->getGuzzleVersion() = 4)
+        {
+            return $this->client_list->get()->json()['items'];
+        } elseif ($this->getGuzzleVersion() = 3)
+        {
+            return $this->client_list->get()->send()->json()['items'];
+        }
     }
 
     /**
@@ -120,11 +185,18 @@ class GW2ItemBot extends GW2ApiBot
             echo "L'id spécifié (" . $id . ") n'est pas dans la liste des items.\n";
             return null;
         }
-        $request = $this->client_details->createRequest('GET');
-        $request->getQuery()
-            ->set('item_id', $id)
-            ->set('lang', $this->lang);
-        return $this->client_details->send($request)->json();
+        if ($this->getGuzzleVersion() = 4)
+        {
+            $request = $this->client_details->createRequest('GET');
+            $request->getQuery()
+                ->set('item_id', $id);
+            return $this->client_details->send($request)->json();
+        } elseif ($this->getGuzzleVersion() = 3)
+        {
+            $request = $this->client_details->get();
+            $request->getQuery()->set('item_id', $id);
+            return $request->send()->json();
+        }
     }
 
     /**
@@ -143,10 +215,10 @@ class GW2ItemBot extends GW2ApiBot
      * @param string $lang
      * @return GW2ItemBot
      */
-    public static function getItemBotInstance($version, $lang)
+    public static function getItemBotInstance($version = self::DFLT_VERSION, $lang = self::DFLT_LANG, $gversion = self::DFLT_GUZZLE_VERSION)
     {
         if (true === is_null(self::$instance)) {
-            self::$instance = new self($version, $lang);
+            self::$instance = new self($version, $lang, $gversion);
         }
         return self::$instance;
     }
