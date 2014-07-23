@@ -3,6 +3,7 @@ namespace SWHawkBot\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use SWHawkBot\Constants;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Cette classe *abstraite* représente un objet quelconque du jeu.
@@ -33,7 +34,7 @@ class Item
      *
      * @var int
      */
-    protected $gw2apiId;
+    protected $gw2ApiId;
 
     /**
      * Nom de l'objet en jeu
@@ -113,6 +114,24 @@ class Item
     protected $accountbind;
 
     /**
+     * Recette permettant de produire l'objet
+     *
+     * @ORM\OneToOne(targetEntity="Recipe")
+     *
+     * @var Recipe
+     */
+    protected $recipe;
+
+    /**
+     * Dispatcher de l'objet
+     *
+     * @ORM\OneToOne(targetEntity="ItemAssociator")
+     *
+     * @var ItemAssociator
+     */
+    protected $associator;
+
+    /**
      * Identifiant de l'icône de l'objet pour l'API de rendu de GuildWars2
      *
      * @ORM\Column(type="integer")
@@ -140,6 +159,14 @@ class Item
     protected $itemRaw;
 
     /**
+     * Ensemble des recettes dans lesquelles cet objet
+     * est un ingrédient
+     *
+     * @var ArrayCollection(Recipe)
+     */
+    protected $recipesUsedIn;
+
+    /**
      * Constructeur de l'objet, possiblement à partir d'un array
      * provenant de l'API GuildWars2
      *
@@ -148,12 +175,14 @@ class Item
      */
     public function __construct($item = null)
     {
+        $this->recipesUsedIn = new ArrayCollection();
+
         if (is_null($item)) {
             return $this;
         }
 
         if (isset($item['item_id'])) {
-            $this->setGw2apiId($item['item_id']);
+            $this->setGw2ApiId($item['item_id']);
         }
         if (isset($item['name'])) {
             $this->setName($item['name']);
@@ -198,12 +227,12 @@ class Item
      * @throws \InvalidArgumentException
      * @return Item
      */
-    public function setGw2apiId($id)
+    public function setGw2ApiId($id)
     {
         if (! is_numeric($id)) {
             throw new \InvalidArgumentException('La fonction attend un id entier. Id donné : ' . var_dump($id));
         }
-        $this->gw2apiId = $id;
+        $this->gw2ApiId = $id;
         return $this;
     }
 
@@ -337,6 +366,28 @@ class Item
 
     /**
      *
+     * @param Recipe $recipe
+     * @return Item
+     */
+    public function setRecipe(Recipe $recipe)
+    {
+        $this->recipe = $recipe;
+        return $this;
+    }
+
+    /**
+     *
+     * @param ItemAssociator $associator
+     * @return Item
+     */
+    public function setAssociator(ItemAssociator $associator)
+    {
+       $this->associator = $associator;
+       return $this;
+    }
+
+    /**
+     *
      * @return int
      */
     public function getId()
@@ -348,9 +399,9 @@ class Item
      *
      * @return int
      */
-    public function getGw2apiId()
+    public function getGw2ApiId()
     {
-        return $this->gw2apiId;
+        return $this->gw2ApiId;
     }
 
     /**
@@ -450,6 +501,35 @@ class Item
     public function getIconFileSignature()
     {
         return $this->iconFileSignature;
+    }
+
+    /**
+     *
+     * @return Recipe
+     */
+    public function getRecipe()
+    {
+        return $this->recipe;
+    }
+
+    /**
+     *
+     * @return ItemAssociator
+     */
+    public function getAssociator()
+    {
+        return $this->associator;
+    }
+
+    public function getRecipesUsedIn()
+    {
+        return $this->recipesUsedIn;
+    }
+
+    public function addRecipeUsedIn(Recipe $recipe)
+    {
+        $this->recipesUsedIn->add($recipe);
+        return $this;
     }
 }
 
