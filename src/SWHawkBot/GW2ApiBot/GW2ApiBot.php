@@ -12,6 +12,8 @@ abstract class GW2ApiBot
 
     protected $version;
 
+    protected $guzzleVersion;
+
     protected $lang;
 
     const BASE_URL = "https://api.guildwars2.com/";
@@ -21,6 +23,9 @@ abstract class GW2ApiBot
     const DFLT_VERSION = "v1";
 
     const DFLT_LANG = "fr";
+
+    const DFLT_GUZZLE_VERSION = 3;
+
 }
 
 ?>
