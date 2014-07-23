@@ -11,7 +11,9 @@ use SWHawkBot\Constants;
  *
  * @author SwHawk
  *
- *         @ORM\Entity @ORM\Table(name="Recipes")
+ *         @ORM\Entity
+ *         @ORM\Table(name="Recipes")
+ *         @ORM\EntityListeners({"SWHawkBot\Entities\Listeners\RecipeListener"})
  */
 class Recipe
 {
@@ -46,49 +48,12 @@ class Recipe
     protected $type;
 
     /**
-     * Arme crée par la recette (classe Weapon)
+     * Identifiant Gw2ApiId de l'objet produit par la
+     * recette
      *
-     * @ORM\OneToOne(targetEntity="Weapon", cascade={"persist", "remove"})
-     *
-     * @var Weapon
+     * @var int
      */
-    protected $weaponOutputItem;
-
-    /**
-     * Pièce d'armure produite par la recette
-     *
-     * @ORM\OneToOne(targetEntity="Armor", cascade={"persist", "remove"})
-     *
-     * @var Armor
-     */
-    protected $armorOutputItem;
-
-    /**
-     * Accessoire produit par la recette
-     *
-     * @ORM\OneToOne(targetEntity="Trinket", cascade={"persist", "remove"})
-     *
-     * @var Trinket
-     */
-    protected $trinketOutputItem;
-
-    /**
-     * Sac produit par la recette
-     *
-     * @ORM\OneToOne(targetEntity="Bag", cascade={"persist", "remove"})
-     *
-     * @var Bag
-     */
-    protected $bagOutputItem;
-
-    /**
-     * Sacoche d'armure produite par la recette
-     *
-     * @ORM\OneToOne(targetEntity="Container", cascade={"persist", "remove"})
-     *
-     * @var Container
-     */
-    protected $containerOutputItem;
+    protected $outputItemId;
 
     /**
      * Nombre d'objets produits par la recette
@@ -120,14 +85,21 @@ class Recipe
     protected $disciplines;
 
     /**
-     * Identifiant (Gw2apiId) du premier ingrédient
+     * ItemAssociator correspondant au premier ingrédient
      * de la recette
      *
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="ItemAssociator", cascade={"persist", "remove"})
      *
-     * @var integer
+     * @var ItemAssociator
      */
-    protected $mat1Id;
+    protected $mat1Associator;
+
+    /**
+     * Premier ingrédient de la recette
+     *
+     * @var Item
+     */
+    protected $mat1;
 
     /**
      * Quantité nécessaire du premier ingrédient
@@ -139,14 +111,21 @@ class Recipe
     protected $mat1Qty;
 
     /**
-     * Identifiant (Gw2apiId) du deuxième ingrédient
+     * ItemAssociator correspondant au deuxième ingrédient
      * de la recette
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="ItemAssociator", cascade={"persist", "remove"})
      *
      * @var integer|null
      */
-    protected $mat2Id = null;
+    protected $mat2Associator = null;
+
+    /**
+     * Premier ingrédient de la recette
+     *
+     * @var Item
+     */
+    protected $mat2;
 
     /**
      * Quantité nécessaire du deuxième ingrédient
@@ -158,14 +137,21 @@ class Recipe
     protected $mat2Qty = null;
 
     /**
-     * Identifiant (Gw2apiId) du troisième ingrédient
+     * ItemAssociator correspondant au troisième ingrédient
      * de la recette
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="ItemAssociator", cascade={"persist", "remove"})
      *
      * @var integer|null
      */
-    protected $mat3Id = null;
+    protected $mat3Associator = null;
+
+    /**
+     * Premier ingrédient de la recette
+     *
+     * @var Item
+     */
+    protected $mat3;
 
     /**
      * Quantité nécessaire du troisième ingrédient
@@ -177,14 +163,21 @@ class Recipe
     protected $mat3Qty = null;
 
     /**
-     * Identifiant (Gw2apiId) du quatrième ingrédient
+     * ItemAssociator correspondant au quatrième ingrédient
      * de la recette
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="ItemAssociator", cascade={"persist", "remove"})
      *
      * @var integer|null
      */
-    protected $mat4Id = null;
+    protected $mat4Associator = null;
+
+    /**
+     * Premier ingrédient de la recette
+     *
+     * @var Item
+     */
+    protected $mat4;
 
     /**
      * Quantité nécessaire du quatrième ingrédient
@@ -292,90 +285,22 @@ class Recipe
         return $this;
     }
 
-    /**
-     *
-     * @param Weapon $weapon
-     * @return \SWHawkBot\Entities\Recipe
-     */
-    public function setWeaponOutputItem(Weapon $weapon)
-    {
-        $this->weaponOutputItem = $weapon;
-        return $this;
-    }
+
 
     /**
      *
-     * @param Armor $armor
-     * @return Recipe
-     */
-    public function setArmorOutputItem(Armor $armor)
-    {
-        $this->armorOutputItem = $armor;
-        return $this;
-    }
-
-    /**
-     *
-     * @param Bag $bag
-     * @return Recipe
-     */
-    public function setBagOutputItem(Bag $bag)
-    {
-        $this->bagOutputItem = $bag;
-        return $this;
-    }
-
-    /**
-     *
-     * @param Container $container
-     * @return Recipe
-     */
-    public function setContaineroutputItem(Container $container)
-    {
-        $this->containerOutputItem = $container;
-        return $this;
-    }
-
-    /**
-     *
-     * @param Trinket $trinket
-     * @return Recipe
-     */
-    public function setTrinketOutputItem(Trinket $trinket)
-    {
-        $this->trinketOutputItem = $trinket;
-        return $this;
-    }
-
-    /**
-     * Setter général pour xxxOutputItem
      *
      * @param integer $id
      * @return \SWHawkBot\Entities\Recipe
      */
-    public function setOutputItem($id)
+    public function setOutputItemId($id)
     {
-        $item = ItemFactory::returnItem($id);
-        if ($item instanceof Weapon) {
-            $this->setWeaponOutputItem($item);
-            return $this;
+        if (!is_int($id))
+        {
+            throw new \InvalidArgumentException('La fonction attend un id entier. Id donné : '.var_dump($id));
         }
-        if ($item instanceof Armor) {
-            $this->setArmorOutputItem($item);
-            return $this;
-        }
-        if ($item instanceof Trinket) {
-            $this->setTrinketOutputItem($item);
-            return $this;
-        }
-        if ($item instanceof Bag) {
-            $this->setBagOutputItem($item);
-            return $this;
-        }
-        if ($item instanceof Container) {
-            $this->setContainerOutputItem($item);
-            return $this;
-        }
+        $this->outputItemId = $id;
+        return $this;
     }
 
     /**
@@ -452,6 +377,17 @@ class Recipe
 
     /**
      *
+     * @param ItemAssociator $associator
+     * @return Recipe
+     */
+    public function setMat1Associator(ItemAssociator $associator)
+    {
+        $this->mat1Associator = $associator;
+        return $this;
+    }
+
+    /**
+     *
      * @param integer $qty
      * @throws \InvalidArgumentException
      * @return Recipe
@@ -477,6 +413,17 @@ class Recipe
             throw new \InvalidArgumentException('La fonction attend un id de matériau entier. Id donné : ' . var_dump($id));
         }
         $this->mat2Id = $id;
+        return $this;
+    }
+
+    /**
+     *
+     * @param ItemAssociator $associator
+     * @return Recipe
+     */
+    public function setMat2Associator(ItemAssociator $associator)
+    {
+        $this->mat2Associator = $associator;
         return $this;
     }
 
@@ -512,6 +459,17 @@ class Recipe
 
     /**
      *
+     * @param ItemAssociator $associator
+     * @return Recipe
+     */
+    public function setMat3Associator(ItemAssociator $associator)
+    {
+        $this->mat3Associator = $associator;
+        return $this;
+    }
+
+    /**
+     *
      * @param integer $qty
      * @throws \InvalidArgumentException
      * @return Recipe
@@ -537,6 +495,17 @@ class Recipe
             throw new \InvalidArgumentException('La fonction attend un id de matériau entier. Id donné : ' . var_dump($id));
         }
         $this->mat4Id = $id;
+        return $this;
+    }
+
+    /**
+     *
+     * @param ItemAssociator $associator
+     * @return Recipe
+     */
+    public function setMat4Associator(ItemAssociator $associator)
+    {
+        $this->mat4Associator = $associator;
         return $this;
     }
 
@@ -599,36 +568,9 @@ class Recipe
         return $this->type;
     }
 
-    /**
-     * @return Armor|null
-     */
-    public function getArmorOutputItem()
+    public function getOutputItemId()
     {
-        return $this->armorOutputItem;
-    }
-
-    /**
-     * @return Bag|null
-     */
-    public function getBagOutputItem()
-    {
-        return $this->bagOutputItem;
-    }
-
-    /**
-     * @return Container|null
-     */
-    public function getContainerOutputItem()
-    {
-        return $this->containerOutputItem;
-    }
-
-    /**
-     * @return Trinket|null
-     */
-    public function getTrinketOutputItem()
-    {
-        return $this->trinketOutputItem;
+        return $this->outputItemId;
     }
 
     /**
