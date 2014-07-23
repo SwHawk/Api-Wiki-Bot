@@ -73,14 +73,14 @@ class GW2ItemBot extends GW2ApiBot
 
         $url = parent::BASE_URL . $this->version . "/";
 
-        if ($gversion = 3 || $gversion = 4)
+        if ($gversion == 3 || $gversion == 4)
         {
             $this->setGuzzleVersion($gversion);
         } else {
             $this->setGuzzleVersion(self::DFLT_GUZZLE_VERSION);
         }
 
-        if ($this->getGuzzleVersion() = 4)
+        if ($this->getGuzzleVersion() == 4)
         {
             $this->client_list = new G4Client(array(
                 'base_url' => $url . self::ITEMS_JSON
@@ -94,7 +94,7 @@ class GW2ItemBot extends GW2ApiBot
                     )
                 )
             ));
-        } else {
+        } elseif ($this->getGuzzleVersion() == 3) {
 
             $memcached = new \Memcached();
 
@@ -147,10 +147,10 @@ class GW2ItemBot extends GW2ApiBot
      */
     public function getItemIds()
     {
-        if ($this->getGuzzleVersion() = 4)
+        if ($this->getGuzzleVersion() == 4)
         {
             return $this->client_list->get()->json()['items'];
-        } elseif ($this->getGuzzleVersion() = 3)
+        } elseif ($this->getGuzzleVersion() == 3)
         {
             return $this->client_list->get()->send()->json()['items'];
         }
@@ -185,13 +185,13 @@ class GW2ItemBot extends GW2ApiBot
             echo "L'id spécifié (" . $id . ") n'est pas dans la liste des items.\n";
             return null;
         }
-        if ($this->getGuzzleVersion() = 4)
+        if ($this->getGuzzleVersion() == 4)
         {
             $request = $this->client_details->createRequest('GET');
             $request->getQuery()
                 ->set('item_id', $id);
             return $this->client_details->send($request)->json();
-        } elseif ($this->getGuzzleVersion() = 3)
+        } elseif ($this->getGuzzleVersion() == 3)
         {
             $request = $this->client_details->get();
             $request->getQuery()->set('item_id', $id);

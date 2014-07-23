@@ -81,14 +81,14 @@ class GW2RecipeBot extends GW2ApiBot
 
         $url = parent::BASE_URL . $this->version . "/";
 
-        if ($gversion = 3 || $gversion = 4)
+        if ($gversion == 3 || $gversion == 4)
         {
             $this->setGuzzleVersion($gversion);
         } else {
             $this->setGuzzleVersion(self::DFLT_GUZZLE_VERSION);
         }
 
-        if ($this->getGuzzleVersion() = 4)
+        if ($this->getGuzzleVersion() == 4)
         {
             $this->client_list = new G4Client(array(
                 'base_url' => $url . self::RECIPE_JSON
@@ -101,7 +101,7 @@ class GW2RecipeBot extends GW2ApiBot
                     )
                 )
             ));
-        } elseif ($this->getGuzzleVersion() = 3)
+        } elseif ($this->getGuzzleVersion() == 3)
         {
             $memcached = new \Memcached();
 
@@ -154,10 +154,10 @@ class GW2RecipeBot extends GW2ApiBot
      */
     public function getRecipesIds()
     {
-        if ($this->getGuzzleVersion() = 4)
+        if ($this->getGuzzleVersion() == 4)
         {
             return $this->client_list->get()->json()['recipes'];
-        } elseif ($this->getGuzzleVersion() = 3)
+        } elseif ($this->getGuzzleVersion() == 3)
         {
             return $this->client_list->get()->send()->json()['recipes'];
         }
@@ -190,13 +190,13 @@ class GW2RecipeBot extends GW2ApiBot
         if (! $this->isValidRecipeId($id)) {
             return null;
         }
-        if ($this->getGuzzleVersion() = 4)
+        if ($this->getGuzzleVersion() == 4)
         {
             $request = $this->client_details->createRequest('GET');
             $request->getQuery()
                 ->set('recipe_id', $id);
             return $this->client_details->send($request)->json();
-        } elseif ($this->getGuzzleVersion() = 3)
+        } elseif ($this->getGuzzleVersion() == 3)
         {
             $request = $this->client_details->get();
             $request->getQuery->set('recipe_id', $id);
