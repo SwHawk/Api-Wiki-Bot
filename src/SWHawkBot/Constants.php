@@ -134,19 +134,32 @@ abstract class Constants
                 "Ring" => "Anneau",
                 "Trinket" => "Accessoire"
             ),
+            "Back" => array(
+                "Back" => "Sac à dos"
+            ),
             "Bag" => array(
                 "Bag" => "Sac",
             ),
             "Consumable" => array(
                 "Food" => "Nourriture",
                 "Generic" => "Consommable",
-                "Unlock" => array(
-                    "Dye" => "Teinture",
-                    "CraftingRecipe" => "Recette"
-                )
+                "Unlock" => "Déblocage"
             ),
             "Container" => array(
                 "Container" => "Conteneur"
+            ),
+            "CraftingMaterial" => array(
+                "CraftingMaterial" => "Matériau d'artisanat"
+            ),
+            "Trophy" => array(
+                "Trophy" => "Trophée"
+            ),
+            "UpgradeComponent" => array(
+                "UpgradeComponent" => "Composant d'amélioration",
+                "Default" => "Bijou",
+                "Gem" => "Gemme",
+                "Sigil" => "Cachet",
+                "Rune" => "Rune"
             )
         ),
         "rarity" => array(
