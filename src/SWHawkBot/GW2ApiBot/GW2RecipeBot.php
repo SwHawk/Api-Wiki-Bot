@@ -68,7 +68,7 @@ class GW2RecipeBot extends GW2ApiBot
      * @param int $version
      * @param string $lang
      */
-    private function __construct($version = parent::DFLT_VERSION, $lang = parent::DFLT_LANG)
+    private function __construct($version = parent::DFLT_VERSION, $lang = parent::DFLT_LANG, $gversion = self::DFLT_GUZZLE_VERSION)
     {
         if (is_numeric($version)) {
             $version = "v" . $version;
@@ -199,7 +199,7 @@ class GW2RecipeBot extends GW2ApiBot
         } elseif ($this->getGuzzleVersion() == 3)
         {
             $request = $this->client_details->get();
-            $request->getQuery->set('recipe_id', $id);
+            $request->getQuery()->set('recipe_id', $id);
             return $request->send()->json();
         }
 
@@ -210,12 +210,13 @@ class GW2RecipeBot extends GW2ApiBot
      *
      * @param string $version
      * @param string $lang
+     * @param int $gversion
      * @return \SWHawkBot\GW2ApiBot\GW2RecipeBot
      */
-    public static function getInstance($version = null, $lang = null)
+    public static function getRecipeBotInstance($version = self::DFLT_VERSION, $lang = self::DFLT_LANG, $gversion = self::DFLT_GUZZLE_VERSION)
     {
         if (true === is_null(self::$instance)) {
-            self::$instance = new self($version, $lang);
+            self::$instance = new self($version, $lang, $gversion);
         }
         return self::$instance;
     }

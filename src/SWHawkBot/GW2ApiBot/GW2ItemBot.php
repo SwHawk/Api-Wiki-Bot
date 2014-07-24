@@ -114,7 +114,7 @@ class GW2ItemBot extends GW2ApiBot
                 )
             ));
 
-            $this->client_details = new G3Client($url . self::ITEMS_JSON, array(
+            $this->client_details = new G3Client($url . self::ITEM_DETAILS_JSON, array(
                 'request.options' => array(
                     'query' => array(
                         'lang' => $this->lang
