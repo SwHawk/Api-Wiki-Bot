@@ -36,7 +36,7 @@ class Recipe
      *
      * @var integer
      */
-    protected $gw2apiId;
+    protected $gw2ApiId;
 
     /**
      * Type de la recette dans la discipline d'artisanat
@@ -54,6 +54,21 @@ class Recipe
      * @var int
      */
     protected $outputItemId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ItemAssociator", inversedBy="recipes", cascade={"persist", "remove"})
+     *
+     * @var ItemAssociator
+     */
+    protected $outputItemAssociator;
+
+    /**
+     * Objet produit par la recette, mis en place
+     * en postLoad
+     *
+     * @var Item
+     */
+    protected $outputItem;
 
     /**
      * Nombre d'objets produits par la recette
@@ -88,7 +103,7 @@ class Recipe
      * ItemAssociator correspondant au premier ingrédient
      * de la recette
      *
-     * @ORM\ManyToOne(targetEntity="ItemAssociator", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="ItemAssociator", inversedBy="mat1Recipes", cascade={"persist", "remove"})
      *
      * @var ItemAssociator
      */
@@ -114,7 +129,7 @@ class Recipe
      * ItemAssociator correspondant au deuxième ingrédient
      * de la recette
      *
-     * @ORM\ManyToOne(targetEntity="ItemAssociator", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="ItemAssociator", inversedBy="mat2Recipes", cascade={"persist", "remove"})
      *
      * @var integer|null
      */
@@ -140,7 +155,7 @@ class Recipe
      * ItemAssociator correspondant au troisième ingrédient
      * de la recette
      *
-     * @ORM\ManyToOne(targetEntity="ItemAssociator", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="ItemAssociator", inversedBy="mat3Recipes", cascade={"persist", "remove"})
      *
      * @var integer|null
      */
@@ -166,7 +181,7 @@ class Recipe
      * ItemAssociator correspondant au quatrième ingrédient
      * de la recette
      *
-     * @ORM\ManyToOne(targetEntity="ItemAssociator", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="ItemAssociator", inversedBy="mat4Recipes", cascade={"persist", "remove"})
      *
      * @var integer|null
      */
@@ -213,15 +228,15 @@ class Recipe
         }
 
         if (isset($recipe['recipe_id'])) {
-            $this->setGw2apiId($recipe['recipe_id']);
+            $this->setGw2ApiId($recipe['recipe_id']);
         }
 
         if (isset($recipe['type'])) {
             $this->setType($recipe['type']);
         }
 
-        if (isset($recipe['output_item_id'], $recipe['type'])) {
-            $this->setOutputItem($recipe['output_item_id']);
+        if (isset($recipe['output_item_id'])) {
+            $this->setOutputItemId((int) $recipe['output_item_id']);
         }
 
         if (isset($recipe['output_item_count'])) {
@@ -260,12 +275,12 @@ class Recipe
      * @throws \InvalidArgumentException
      * @return Recipe
      */
-    public function setGw2apiId($id)
+    public function setGw2ApiId($id)
     {
         if (! is_numeric($id)) {
             throw new \InvalidArgumentException('La fonction attend un id entier. Id donné : ' . var_dump($id));
         }
-        $this->gw2apiId = $id;
+        $this->gw2ApiId = $id;
         return $this;
     }
 
@@ -300,6 +315,18 @@ class Recipe
             throw new \InvalidArgumentException('La fonction attend un id entier. Id donné : '.var_dump($id));
         }
         $this->outputItemId = $id;
+        return $this;
+    }
+
+    public function setOutputItemAssociator(ItemAssociator $associator)
+    {
+        $this->outputItemAssociator = $associator;
+        return $this;
+    }
+
+    public function setOutputItem(Item $item)
+    {
+        $this->outputItem = $item;
         return $this;
     }
 
@@ -554,9 +581,9 @@ class Recipe
      *
      * @return integer
      */
-    public function getGw2apiId()
+    public function getGw2ApiId()
     {
-        return $this->gw2apiId;
+        return $this->gw2ApiId;
     }
 
     /**
@@ -573,13 +600,23 @@ class Recipe
         return $this->outputItemId;
     }
 
+    public function getOutputItemAssociator()
+    {
+        return $this->outputItemAssociator;
+    }
+
+    public function getOutputItem()
+    {
+        return $this->outputItem;
+    }
+
     /**
      *
      * @return integer
      */
     public function getOutputItemCount()
     {
-        return $this->output_item_count;
+        return $this->outputItemCount;
     }
 
     /**
@@ -611,6 +648,15 @@ class Recipe
 
     /**
      *
+     * @return ItemAssociator
+     */
+    public function getMat1Associator()
+    {
+        return $this->mat1Associator;
+    }
+
+    /**
+     *
      * @return integer
      */
     public function getMat1Qty()
@@ -625,6 +671,15 @@ class Recipe
     public function getMat2Id()
     {
         return $this->mat2Id;
+    }
+
+    /**
+     *
+     * @return ItemAssociator
+     */
+    public function getMat2Associator()
+    {
+        return $this->mat2Associator;
     }
 
     /**
@@ -647,6 +702,15 @@ class Recipe
 
     /**
      *
+     * @return ItemAssociator
+     */
+    public function getMat3Associator()
+    {
+        return $this->mat3Associator;
+    }
+
+    /**
+     *
      * @return integer|null
      */
     public function getMat3Qty()
@@ -661,6 +725,15 @@ class Recipe
     public function getMat4Id()
     {
         return $this->mat4Id;
+    }
+
+    /**
+     *
+     * @return ItemAssociator
+     */
+    public function getMat4Associator()
+    {
+        return $this->mat4Associator;
     }
 
     /**
