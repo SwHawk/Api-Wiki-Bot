@@ -39,6 +39,11 @@ class ItemAssociatorListener
             $item = $associator->getCraftingMaterial();
         }
 
+        if (!is_null($associator->getGizmo()))
+        {
+            $item = $associator->getGizmo();
+        }
+
         if (!is_null($associator->getTrinket()))
         {
             $item = $associator->getTrinket();
@@ -60,39 +65,5 @@ class ItemAssociatorListener
         }
 
         $associator->setRealItem($item);
-
-            if (!$associator->getMat1Recipes()->count())
-        {
-            foreach($associator->getMat1Recipes() as $recipe)
-            {
-                $associator->getRealItem()->addRecipeUsedIn($recipe);
-            }
-        }
-
-        if (!$associator->getMat2Recipes()->count())
-        {
-            foreach($associator->getMat2Recipes() as $recipe)
-            {
-                $associator->getRealItem()->addRecipeUsedIn($recipe);
-            }
-        }
-
-        if (!$associator->getMat3Recipes()->count())
-        {
-            foreach($associator->getMat3Recipes() as $recipe)
-            {
-                $associator->getRealItem()->addRecipeUsedIn($recipe);
-            }
-        }
-
-        if (!$associator->getMat4Recipes()->count())
-        {
-            foreach($associator->getMat4Recipes() as $recipe)
-            {
-                $associator->getRealItem()->addRecipeUsedIn($recipe);
-            }
-        }
-
-
     }
 }
