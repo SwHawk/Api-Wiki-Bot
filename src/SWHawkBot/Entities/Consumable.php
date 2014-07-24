@@ -18,7 +18,7 @@ class Consumable extends Item
     /**
      * Durée de l'effet du consommable en ms
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      *
      * @var int
      */
@@ -27,7 +27,7 @@ class Consumable extends Item
     /**
      * Description de l'effet du consommable
      *
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      *
      * @var string
      */
@@ -36,7 +36,7 @@ class Consumable extends Item
     /**
      * Type de déblocage effectué par le consommable
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      *
      * @var unknown
      */
@@ -44,12 +44,17 @@ class Consumable extends Item
 
     public function __construct($consumable)
     {
-        parent::_construct($consumable);
+        parent::__construct($consumable);
         $consumable_specific = $consumable['consumable'];
+
+        if (isset($consumable_specific['type']))
+        {
+            $this->setType($consumable_specific['type']);
+        }
 
         if (isset($consumable_specific['duration_ms']))
         {
-            $this->setDuration($consumable_specific['duration_ms']);
+            $this->setDuration((int) $consumable_specific['duration_ms']);
         }
 
         if (isset($consumable_specific['description']))
