@@ -17,12 +17,22 @@ class RecipeListener
         $associator = $associatorRepo->findOneBy(array('gw2ApiId' => $outputItemId));
         $em->beginTransaction();
         try {
-            if (is_null($associator->getGw2ApiId()))
+            if (is_null($associator))
             {
-                $item = ItemFactory::returnItem($outputItemId);
+                $item = ItemFactory::returnItem((int) $outputItemId);
+                if (is_null($item)){
+                    throw new \Exception("L'outputitem ayant pour id d'API : ".$outputItemId." n'est pas géré par la factory");
+                }
+                if (is_null($item->getType()))
+                {
+                    throw new \Exception("l'outputitem ayant pour id d'aPI : ".$outputItemId." n'a pas son type défini correctement");
+                }
                 $em->persist($item);
                 $itemAssociator = new ItemAssociator($item);
                 $em->persist($itemAssociator);
+                $recipe->setOutputItemAssociator($itemAssociator);
+            } else {
+                $recipe->setOutputItemAssociator($associator);
             }
             $ingredientsId = array();
             for ($i = 1 ; $i < 5 ; $i++)
@@ -37,9 +47,16 @@ class RecipeListener
             foreach($ingredientsId as $ingredientNumber => $ingredientId)
             {
                 $ingredientAssociator = $associatorRepo->findOneBy(array('gw2ApiId' => $ingredientId));
-                if (is_null($ingredientAssociator->getGw2ApiId()))
+                if (is_null($ingredientAssociator))
                 {
-                    $ingredient = ItemFactory::returnItem($ingredientId);
+                    $ingredient = ItemFactory::returnItem((int) $ingredientId);
+                    if (is_null($ingredient)){
+                        throw new \Exception("L'ingredient ayant pour id d'API : ".$ingredientId." n'est pas géré par la factory");
+                    }
+                    if (is_null($ingredient->getType()))
+                    {
+                        throw new \Exception("l'ingredient ayant pour id d'aPI : ".$ingredientId." n'a pas son type défini correctement");
+                    }
                     $em->persist($ingredient);
                     $ingredientAssociator = new ItemAssociator($ingredient);
                     $em->persist($ingredientAssociator);
@@ -61,7 +78,7 @@ class RecipeListener
         $outputItemId = $recipe->getOutputItemId();
         $associatorRepo = $em->getRepository("SWHawkBot\Entities\ItemAssociator");
         $itemAssociator = $associatorRepo->findOneBy(array('gw2ApiId' => $outputItemId));
-        $itemAssociator->getRealItem()->setRecipe($recipe);
+        $itemAssociator->addRecipe($recipe);
         for ($i = 1 ; $i < 5 ; $i++)
         {
             $ingredientAssociatorGetter = "getMat".$i."Associator";
@@ -71,6 +88,15 @@ class RecipeListener
             }
             $recipeAdder = "addMat".$i."Recipe";
             $recipe->$ingredientAssociatorGetter()->$recipeAdder($recipe);
+        }
+    }
+
+    public function postLoad(Recipe $recipe, LifecycleEventArgs $event)
+    {
+        if (!is_null($recipe->getOutputItemAssociator()))
+        {
+            $item = $recipe->getOutputItemAssociator()->getRealItem();
+            $recipe->setOutputItem($item);
         }
     }
 }
