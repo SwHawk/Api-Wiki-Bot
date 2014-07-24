@@ -106,11 +106,13 @@ abstract class Constants
                 "Hammer" => "Marteau",
                 "Harpoon" => "Lance",
                 "Longbow" => "Arc long",
+                "LongBow" => "Arc long",
                 "Mace" => "Masse",
                 "Pistol" => "Pistolet",
                 "Rifle" => "Fusil",
                 "Scepter" => "Sceptre",
                 "Shield" => "Bouclier",
+                "ShortBow" => "Arc court",
                 "Shortbow" => "Arc court",
                 "Speargun" => "Fusil-harpon",
                 "Staff" => "Bâton",
@@ -129,6 +131,7 @@ abstract class Constants
                 "Shoulders" => "Epaulière"
             ),
             "Trinket" => array(
+                "Accessory" => "Accessoire",
                 "Amulet" => "Amulette",
                 "Earring" => "Accessoire",
                 "Ring" => "Anneau",
@@ -141,21 +144,26 @@ abstract class Constants
                 "Bag" => "Sac",
             ),
             "Consumable" => array(
+                "Booze" => "Alcool",
                 "Food" => "Nourriture",
                 "Generic" => "Consommable",
-                "Unlock" => "Déblocage"
+                "Unlock" => "Déblocage",
+                "Utility" => "Utilitaire"
             ),
             "Container" => array(
-                "Container" => "Conteneur"
+                "Default" => "Conteneur",
+                "GiftBox" => "GiftBox"
             ),
             "CraftingMaterial" => array(
                 "CraftingMaterial" => "Matériau d'artisanat"
+            ),
+            "Gizmo" => array(
+                "Default" => "Gizmo"
             ),
             "Trophy" => array(
                 "Trophy" => "Trophée"
             ),
             "UpgradeComponent" => array(
-                "UpgradeComponent" => "Composant d'amélioration",
                 "Default" => "Bijou",
                 "Gem" => "Gemme",
                 "Sigil" => "Cachet",
