@@ -22,6 +22,15 @@ class CraftingMaterial extends Item
      */
     protected $prerequisites;
 
+    public function __construc($material)
+    {
+        parent::__construct($material);
+
+        $this->setType(null);
+
+        return $this;
+    }
+
     public function setPrerequisites(array $prerequisites)
     {
         $this->prerequisites = $prerequisites;
@@ -30,5 +39,10 @@ class CraftingMaterial extends Item
     public function getPrerequisites()
     {
         return $this->prerequisites;
+    }
+
+    public function setType($type)
+    {
+        $this->type = "Matériau d'artisanat";
     }
 }
