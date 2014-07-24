@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @author SwHawk
  *
  *         @ORM\MappedSuperClass
+ *         @ORM\EntityListeners({"SWHawkBot\Entities\Listeners\ItemListener"})
  */
 class Item
 {
@@ -114,13 +115,12 @@ class Item
     protected $accountbind;
 
     /**
-     * Recette permettant de produire l'objet
+     * Recettes permettant de produire l'objet,
+     * initialisé par le listener
      *
-     * @ORM\OneToOne(targetEntity="Recipe")
-     *
-     * @var Recipe
+     * @var ArrayCollection(Recipe)
      */
-    protected $recipe;
+    protected $recipes;
 
     /**
      * Dispatcher de l'objet
@@ -176,13 +176,14 @@ class Item
     public function __construct($item = null)
     {
         $this->recipesUsedIn = new ArrayCollection();
+        $this->recipes = new ArrayCollection();
 
         if (is_null($item)) {
             return $this;
         }
 
         if (isset($item['item_id'])) {
-            $this->setGw2ApiId($item['item_id']);
+            $this->setGw2ApiId((int) $item['item_id']);
         }
         if (isset($item['name'])) {
             $this->setName($item['name']);
@@ -229,7 +230,7 @@ class Item
      */
     public function setGw2ApiId($id)
     {
-        if (! is_numeric($id)) {
+        if (! is_int($id)) {
             throw new \InvalidArgumentException('La fonction attend un id entier. Id donné : ' . var_dump($id));
         }
         $this->gw2ApiId = $id;
@@ -369,9 +370,9 @@ class Item
      * @param Recipe $recipe
      * @return Item
      */
-    public function setRecipe(Recipe $recipe)
+    public function addRecipe(Recipe $recipe)
     {
-        $this->recipe = $recipe;
+        $this->getRecipes()->add($recipe);
         return $this;
     }
 
@@ -507,9 +508,9 @@ class Item
      *
      * @return Recipe
      */
-    public function getRecipe()
+    public function getRecipes()
     {
-        return $this->recipe;
+        return $this->recipes;
     }
 
     /**
