@@ -40,11 +40,16 @@ class ItemAssociator
     /**
      * Instace de l'objet contenu dans ce conteneur
      *
-     * @ORM\Column(type="object")
-     *
      * @var SWHawkBot\Items\Item;
      */
     protected $realItem;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Recipe", mappedBy="outputItemAssociator")
+     *
+     * @var ArrayCollection[Recipe]
+     */
+    protected $recipes;
 
     /**
      * @ORM\OneToMany(targetEntity="Recipe", mappedBy="mat1Associator")
@@ -117,6 +122,13 @@ class ItemAssociator
     protected $craftingMaterial;
 
     /**
+     * @ORM\OneToOne(targetEntity="Gizmo", inversedBy="associator")
+     *
+     * @var Gizmo
+     */
+    protected $gizmo;
+
+    /**
      * @ORM\OneToOne(targetEntity="Trinket", inversedBy="associator")
      *
      * @var Trinket
@@ -153,6 +165,7 @@ class ItemAssociator
      */
     public function __construct(Item $item = null)
     {
+        $this->recipes = new ArrayCollection();
         $this->mat1Recipes = new ArrayCollection();
         $this->mat2Recipes = new ArrayCollection();
         $this->mat3Recipes = new ArrayCollection();
@@ -276,6 +289,12 @@ class ItemAssociator
         return $this;
     }
 
+    public function setGuizmo(Gizmo $gizmo)
+    {
+        $this->gizmo = $gizmo;
+        return $this;
+    }
+
     public function setTrinket(Trinket $trinket)
     {
         $this->trinket = $trinket;
@@ -307,6 +326,16 @@ class ItemAssociator
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getGw2ApiId()
+    {
+        return $this->gw2ApiId;
+    }
+
+    public function getRecipes()
+    {
+        return $this->recipes;
     }
 
     /**
@@ -343,6 +372,12 @@ class ItemAssociator
     public function getMat4Recipes()
     {
         return $this->mat4Recipes;
+    }
+
+    public function addRecipe(Recipe $recipe)
+    {
+        $this->recipes->add($recipe);
+        return $this;
     }
 
     /**
@@ -417,6 +452,11 @@ class ItemAssociator
     public function getCraftingMaterial()
     {
         return $this->craftingMaterial;
+    }
+
+    public function getGizmo()
+    {
+        return $this->gizmo;
     }
 
     public function getTrinket()
