@@ -15,6 +15,7 @@ class Container extends Item
 {
 
     /**
+     * Constructeur faisant appel au constructeur parent
      *
      * @param string $container
      * @return Container
@@ -29,6 +30,7 @@ class Container extends Item
     }
 
     /**
+     * Surcharge de la méthode parente
      *
      * @see \SWHawkBot\Entities\Item::setType()
      * @return Container
