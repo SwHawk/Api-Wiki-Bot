@@ -42,6 +42,13 @@ class Consumable extends Item
      */
     protected $unlockType;
 
+    /**
+     * Constructeur faisant appel au constructeur
+     * de la classe parente
+     *
+     * @param arrray $consumable
+     * @return Consumable
+     */
     public function __construct($consumable)
     {
         parent::__construct($consumable);
@@ -70,6 +77,14 @@ class Consumable extends Item
         return $this;
     }
 
+    /**
+     * Définit la durée de l'effet du consommable
+     * en ms
+     *
+     * @param integer $duration
+     * @throws \InvalidArgumentException
+     * @return \SWHawkBot\Entities\Consumable
+     */
     public function setDuration($duration)
     {
         if (!is_int($duration))
@@ -80,18 +95,36 @@ class Consumable extends Item
         return $this;
     }
 
+    /**
+     * Définit l'effet du consommable
+     *
+     * @param string $effect
+     * @return \SWHawkBot\Entities\Consumable
+     */
     public function setEffect($effect)
     {
         $this->effect = $effect;
         return $this;
     }
 
+    /**
+     * Définit le type de déblocage fourni
+     * par le consommable
+     *
+     * @param string $type
+     * @return \SWHawkBot\Entities\Consumable
+     */
     public function setUnlockType($type)
     {
         $this->unlockType = $type;
         return $this;
     }
 
+    /**
+     * Surcharge de la classe parente
+     *
+     * @see \SWHawkBot\Entities\Item::setType()
+     */
     public function setType($type)
     {
         if (array_key_exists($type, Constants::$translation['item_types']['Consumable']))
@@ -101,16 +134,32 @@ class Consumable extends Item
         return $this;
     }
 
+    /**
+     * Renvoie la durée de l'effet du consommable
+     *
+     * @return integer
+     */
     public function getDuration()
     {
         return $this->duration;
     }
 
+    /**
+     * Renvoie la description de l'effet du consommable
+     *
+     * @return string
+     */
     public function getEffect()
     {
         return $this->effect;
     }
 
+    /**
+     * Renvoie le type de déblocage fourni par le
+     * consommable
+     *
+     * @return \SWHawkBot\Entities\unknown
+     */
     public function getUnlockType()
     {
         return $this->unlockType;
