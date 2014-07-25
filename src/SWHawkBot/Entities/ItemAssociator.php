@@ -13,7 +13,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  *         @ORM\Entity
  *         @ORM\Table(name="Items")
- *         @ORM\EntityListeners({"SWHawkBot\Entities\Listeners\ItemAssociatorListener"})
  */
 class ItemAssociator
 {
@@ -80,77 +79,77 @@ class ItemAssociator
     protected $mat4Recipes;
 
     /**
-     * @ORM\OneToOne(targetEntity="Armor", inversedBy="associator")
+     * @ORM\OneToOne(targetEntity="Armor", inversedBy="associator", fetch="EAGER")
      *
      * @var Armor
      */
     protected $armorpiece;
 
     /**
-     * @ORM\OneToOne(targetEntity="Back", inversedBy="associator")
+     * @ORM\OneToOne(targetEntity="Back", inversedBy="associator", fetch="EAGER")
      *
      * @var Back
      */
     protected $back;
 
     /**
-     * @ORM\OneToOne(targetEntity="Bag", inversedBy="associator")
+     * @ORM\OneToOne(targetEntity="Bag", inversedBy="associator", fetch="EAGER")
      *
      * @var Bag
      */
     protected $bag;
 
     /**
-     * @ORM\OneToOne(targetEntity="Consumable", inversedBy="associator")
+     * @ORM\OneToOne(targetEntity="Consumable", inversedBy="associator", fetch="EAGER")
      *
      * @var Consumable
      */
     protected $consumable;
 
     /**
-     * @ORM\OneToOne(targetEntity="Container", inversedBy="associator")
+     * @ORM\OneToOne(targetEntity="Container", inversedBy="associator", fetch="EAGER")
      *
      * @var Container
      */
     protected $container;
 
     /**
-     * @ORM\OneToOne(targetEntity="CraftingMaterial", inversedBy="associator")
+     * @ORM\OneToOne(targetEntity="CraftingMaterial", inversedBy="associator", fetch="EAGER")
      *
      * @var CraftingMaterial
      */
     protected $craftingMaterial;
 
     /**
-     * @ORM\OneToOne(targetEntity="Gizmo", inversedBy="associator")
+     * @ORM\OneToOne(targetEntity="Gizmo", inversedBy="associator", fetch="EAGER")
      *
      * @var Gizmo
      */
     protected $gizmo;
 
     /**
-     * @ORM\OneToOne(targetEntity="Trinket", inversedBy="associator")
+     * @ORM\OneToOne(targetEntity="Trinket", inversedBy="associator", fetch="EAGER")
      *
      * @var Trinket
      */
     protected $trinket;
 
     /**
-     * @ORM\OneToOne(targetEntity="Trophy", inversedBy="associator")
+     * @ORM\OneToOne(targetEntity="Trophy", inversedBy="associator", fetch="EAGER")
      *
      * @var Trophy
      */
     protected $trophy;
 
     /**
-     * @ORM\OneToOne(targetEntity="UpgradeComponent", inversedBy="associator")
+     * @ORM\OneToOne(targetEntity="UpgradeComponent", inversedBy="associator", fetch="EAGER")
      *
      * @var UpgradeComponent
      */
     protected $upgradeComponent;
 
     /**
-     * @ORM\OneToOne(targetEntity="Weapon", inversedBy="associator")
+     * @ORM\OneToOne(targetEntity="Weapon", inversedBy="associator", fetch="EAGER")
      *
      * @var Weapon
      */
@@ -319,6 +318,53 @@ class ItemAssociator
         return $this;
     }
 
+    private function initRealItem()
+    {
+        if (!is_null($this->getArmorpiece())) {
+            $this->setRealItem($this->getArmorpiece());
+        }
+
+        if (!is_null($this->getBack())) {
+            $this->setRealItem($this->getBack());
+        }
+
+        if (!is_null($this->getBag())) {
+            $this->setRealItem($this->getBag());
+        }
+
+        if (!is_null($this->getConsumable())) {
+            $this->setRealItem($this->getConsumable());
+        }
+
+        if (!is_null($this->getContainer())) {
+            $this->setRealItem($this->getContainer());
+        }
+
+        if (!is_null($this->getCraftingMaterial())) {
+            $this->setRealItem($this->getCraftingMaterial());
+        }
+
+        if (!is_null($this->getGizmo())) {
+            $this->setRealItem($this->getGizmo());
+        }
+
+        if (!is_null($this->getTrinket())) {
+            $this->setRealItem($this->getTrinket());
+        }
+
+        if (!is_null($this->getTrophy())) {
+            $this->setRealItem($this->getTrophy());
+        }
+
+        if (!is_null($this->getUpgradeComponent())) {
+            $this->setRealItem($this->getUpgradeComponent());
+        }
+
+        if (!is_null($this->getWeapon())) {
+            $this->setRealItem($this->getWeapon());
+        }
+    }
+
     /**
      *
      * @return int
@@ -481,6 +527,9 @@ class ItemAssociator
 
     public function getRealItem()
     {
+        if (is_null($this->realItem)) {
+            $this->initRealItem();
+        }
         return $this->realItem;
     }
 
