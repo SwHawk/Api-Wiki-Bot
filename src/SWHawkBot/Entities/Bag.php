@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Modèle de données des sacs
  *
  * @author SwHawk
- *        
+ *
  *         @ORM\Entity @ORM\Table(name="Bags")
  */
 class Bag extends Item
@@ -32,26 +32,34 @@ class Bag extends Item
      */
     protected $noSellOrSort;
 
+    /**
+     * Constructeur de la classe, faisant appel
+     * aux constructeurs des classes parentes
+     *
+     * @param array $bag
+     * @return \SWHawkBot\Entities\Bag
+     */
     public function __construct($bag = null)
     {
         parent::__construct($bag);
-        
+
         $bag_specific = $bag['bag'];
-        
+
         if (isset($bag_specific['size'])) {
             $this->setSize($bag_specific['size']);
         }
-        
+
         if (isset($bag_specific['no_sell_or_sort'])) {
             $this->setNoSellOrSort($bag_specific['no_sell_or_sort']);
         }
-        
+
         return $this;
     }
 
     /**
+     * Définit la taille du sac
      *
-     * @param integer $size            
+     * @param integer $size
      * @throws \InvalidArgumentException
      * @return \SWHawkBot\Entities\Bag
      */
@@ -65,8 +73,10 @@ class Bag extends Item
     }
 
     /**
+     * Définit si le compactage et la vente des
+     * objets contenus est possible
      *
-     * @param integer $noSellOrSort            
+     * @param integer $noSellOrSort
      * @throws \InvalidArgumentException
      * @return \SWHawkBot\Entities\Bag
      */
@@ -80,6 +90,7 @@ class Bag extends Item
     }
 
     /**
+     * Retourne la taille du sac
      *
      * @return integer
      */
@@ -89,6 +100,9 @@ class Bag extends Item
     }
 
     /**
+     * Retourne la possibilité ou non
+     * de compacter ou vendre les objets
+     * contenus dans le sac
      *
      * @return boolean
      */
