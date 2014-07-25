@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use SWHawkBot\Constants;
 
 /**
+ * Modèle de donnée des consommables
  *
  * @author swhawk
  *
