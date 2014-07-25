@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @author SwHawk
  *
  *         @ORM\MappedSuperClass
- *         @ORM\EntityListeners({"SWHawkBot\Entities\Listeners\ItemListener"})
+ *
  */
 class Item
 {
@@ -123,7 +123,8 @@ class Item
     protected $recipes;
 
     /**
-     * Dispatcher de l'objet
+     * Associator de l'objet. Utilisé pour faire les liaisons
+     * entre les recettes et les différentes classes d'objets
      *
      * @ORM\OneToOne(targetEntity="ItemAssociator")
      *
@@ -160,7 +161,8 @@ class Item
 
     /**
      * Ensemble des recettes dans lesquelles cet objet
-     * est un ingrédient
+     * est un ingrédient. Rempli depuis l'associator
+     * de l'objet
      *
      * @var ArrayCollection(Recipe)
      */
@@ -223,6 +225,8 @@ class Item
     }
 
     /**
+     * Définit l'identifiant de l'objet auprès
+     * de l'API de GW2
      *
      * @param int $id
      * @throws \InvalidArgumentException
@@ -238,6 +242,7 @@ class Item
     }
 
     /**
+     * Définit le nom de l'objet
      *
      * @param string $name
      * @return Item
@@ -249,6 +254,7 @@ class Item
     }
 
     /**
+     * Définit la description de l'objet
      *
      * @param string $description
      * @return Item
@@ -260,6 +266,8 @@ class Item
     }
 
     /**
+     * Définit le type de l'objet, destiné
+     * à être surchargé par les classes filles
      *
      * @param string $type
      * @return Item
@@ -271,6 +279,8 @@ class Item
     }
 
     /**
+     * Définit le niveau minimum pour pouvoir
+     * utiliser l'objet
      *
      * @param int $level
      * @throws \InvalidArgumentException
@@ -286,6 +296,8 @@ class Item
     }
 
     /**
+     * Définit la rareté de l'objet, peut la traduire
+     * depuis la rareté renvoyée par l'API
      *
      * @param string $rarity
      * @return Item
@@ -295,10 +307,14 @@ class Item
         if (array_key_exists($rarity, Constants::$translation['rarity'])) {
             $this->rarity = Constants::$translation['rarity'][$rarity];
             return $this;
+        } elseif(in_array($rarity, Constants::$translation['rarity'])) {
+            $this->rarity = $rarity;
+            return $this;
         }
     }
 
     /**
+     * Définit la valeur marchande de l'objet
      *
      * @param int $vendor_value
      * @throws \InvalidArgumentException
@@ -314,6 +330,8 @@ class Item
     }
 
     /**
+     * Définit si et comment l'objet est lié à l'âme
+     * en traduisant les termes renvoyés par l'API
      *
      * @param string $soulbind
      * @return Item
@@ -327,19 +345,23 @@ class Item
     }
 
     /**
+     * Définit si et comment l'objet est lié au compte
+     * en traduisant les termes renvoyés par l'API
      *
      * @param string $accountbind
      * @return Item
      */
     public function setAccountbind($accountbind)
     {
-        if (array_key_exists($soulbind, Constants::$translation['item_flags']['account_binding'])) {
+        if (array_key_exists($accountbind, Constants::$translation['item_flags']['account_binding'])) {
             $this->accountbind = Constants::$translation['item_flags']['account_binding'][$accountbind];
             return $this;
         }
     }
 
     /**
+     * Définit l'identifiant de l'icône de l'objet pour
+     * l'API de rendu
      *
      * @param int $id
      * @throws \InvalidArgumentException
@@ -355,6 +377,8 @@ class Item
     }
 
     /**
+     * Définit la signature de l'icône de l'objet pour
+     * l'API de rendu
      *
      * @param string $signature
      * @return \SWHawkBot\Entities\Item
@@ -366,6 +390,8 @@ class Item
     }
 
     /**
+     * Permet d'ajouter une recette à la collection
+     * de recettes permettant de produire l'objet
      *
      * @param Recipe $recipe
      * @return Item
@@ -377,6 +403,7 @@ class Item
     }
 
     /**
+     * Définit l'associator de l'objet
      *
      * @param ItemAssociator $associator
      * @return Item
@@ -388,6 +415,7 @@ class Item
     }
 
     /**
+     * Renvoie l'Id de l'objet en BDD
      *
      * @return int
      */
@@ -397,6 +425,8 @@ class Item
     }
 
     /**
+     * Renvoie l'identifiant de l'objet auprès
+     * de l'API GW2
      *
      * @return int
      */
@@ -406,6 +436,7 @@ class Item
     }
 
     /**
+     * Renvoie le nom de l'objet
      *
      * @return string
      */
@@ -415,6 +446,7 @@ class Item
     }
 
     /**
+     * Renvoie la description de l'objet
      *
      * @return string
      */
@@ -424,6 +456,7 @@ class Item
     }
 
     /**
+     * Renvoie le type de l'objet
      *
      * @return string
      */
@@ -433,6 +466,8 @@ class Item
     }
 
     /**
+     * Renvoie le niveau nécessaire pour
+     * utiliser l'objet
      *
      * @return int
      */
@@ -442,6 +477,7 @@ class Item
     }
 
     /**
+     * Renvoie la rareté de l'objet
      *
      * @return string
      */
@@ -451,6 +487,7 @@ class Item
     }
 
     /**
+     * Renvoie la valeur marchande de l'objet
      *
      * @return int
      */
@@ -460,8 +497,9 @@ class Item
     }
 
     /**
+     * Renvoie si et comment l'objet est lié à l'âme
      *
-     * @return string
+     * @return string|null
      */
     public function getSoulbind()
     {
@@ -469,8 +507,9 @@ class Item
     }
 
     /**
+     * Renvoie si et comment l'objet est lié au compte
      *
-     * @return string
+     * @return string|null
      */
     public function getAccountbind()
     {
@@ -478,6 +517,8 @@ class Item
     }
 
     /**
+     * Renvoie le tableau JSON de l'objet
+     * donné par l'API GW2
      *
      * @return string
      */
@@ -487,6 +528,8 @@ class Item
     }
 
     /**
+     * Renvoie l'identifiant de l'icône de l'objet
+     * auprès de l'API de rendu de GW2
      *
      * @return int
      */
@@ -496,6 +539,8 @@ class Item
     }
 
     /**
+     * Renvoie la signature de l'icône de l'objet
+     * auprès de l'API de rendu de GW2
      *
      * @return string
      */
@@ -505,15 +550,34 @@ class Item
     }
 
     /**
+     * Renvoie la collection de recettes permettant de
+     * produire l'objet
      *
-     * @return Recipe
+     * @return ArrayCollection(Recipe)
      */
     public function getRecipes()
     {
+        if ($this->recipes->isEmpty())
+        {
+            $this->initRecipes();
+        }
         return $this->recipes;
     }
 
     /**
+     * Initialise la collection de recettes
+     * permettant de produire l'objet
+     */
+    private function initRecipes()
+    {
+        foreach($this->getAssociator()->getRecipes() as $recipe)
+        {
+            $this->addRecipe($recipe);
+        }
+    }
+
+    /**
+     * Renvoie l'associator de l'objet
      *
      * @return ItemAssociator
      */
@@ -522,11 +586,47 @@ class Item
         return $this->associator;
     }
 
+    /**
+     * Renvoie la collection de recettes pour lesquelles
+     * l'objet est un ingrédient
+     *
+     * @return ArrayCollection(Recipe)
+     */
     public function getRecipesUsedIn()
     {
+        if ($this->recipesUsedIn->isEmpty())
+        {
+            $this->initUsedInRecipes();
+        }
         return $this->recipesUsedIn;
     }
 
+    /**
+     * Initialise la collection des recettes pour
+     * lesquelles l'objet est un ingrédient
+     */
+    private function initUsedInRecipes()
+    {
+        $associator = $this->getAssociator();
+        for ( $i = 1 ; $i <= 4 ; $i++) {
+            $recipeGetter = "getMat".$i."Recipes";
+            if (!$associator->$recipeGetter()->isEmpty()) {
+                foreach($associator->$recipeGetter() as $recipe)
+                {
+                    $this->addRecipeUsedIn($recipe);
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Ajoute une recette à la collection des recettes
+     * pour lesquelle l'objet est un ingrédient
+     *
+     * @param Recipe $recipe
+     * @return \SWHawkBot\Entities\Item
+     */
     public function addRecipeUsedIn(Recipe $recipe)
     {
         $this->recipesUsedIn->add($recipe);
