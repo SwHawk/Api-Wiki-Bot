@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Classe *abstraite* pour les objets donnant
- * un skill de buff passif (consommables, etc...)
+ * un skill de buff passif (composants d'amélioration...)
  *
  * @author swhawk
  *
