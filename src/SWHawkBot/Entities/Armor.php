@@ -57,6 +57,7 @@ class Armor extends BonusItem
     }
 
     /**
+     * Définit la classe d'armure de l'objet
      *
      * @param string $class
      * @return Armor
@@ -73,6 +74,8 @@ class Armor extends BonusItem
     }
 
     /**
+     * Définit le type de la pièce d'armure,
+     * en surchargeant la méthode de la classe parente
      *
      * @see \SWHawkBot\Entities\Item::setType()
      */
@@ -87,6 +90,8 @@ class Armor extends BonusItem
     }
 
     /**
+     * Définit la défense apportée par la pièce
+     * d'armure
      *
      * @param integer $defense
      * @throws \InvalidArgumentException
@@ -102,6 +107,8 @@ class Armor extends BonusItem
     }
 
     /**
+     * Retourne la défense octroyée par la
+     * pièce d'armure
      *
      * @return integer
      */
@@ -111,6 +118,8 @@ class Armor extends BonusItem
     }
 
     /**
+     * Retourne la classe d'armure de la
+     * pièce
      *
      * @return string
      */
