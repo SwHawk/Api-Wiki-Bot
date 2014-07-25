@@ -31,6 +31,7 @@ class BuffItem extends Item
     protected $buffSkillDescription = null;
 
     /**
+     * Définit l'identifiant du skill de buff
      *
      * @param integer $modifier
      * @throws \InvalidArgumentException
@@ -46,6 +47,7 @@ class BuffItem extends Item
     }
 
     /**
+     * Définit la description du skill de buff
      *
      * @param integer $modifier
      * @throws \InvalidArgumentException
@@ -58,6 +60,7 @@ class BuffItem extends Item
     }
 
     /**
+     * Renvoie l'identifiant du skill de buff
      *
      * @return integer|null
      */
@@ -67,6 +70,7 @@ class BuffItem extends Item
     }
 
     /**
+     * Renvoie la description du skill de buff
      *
      * @return string|null
      */
