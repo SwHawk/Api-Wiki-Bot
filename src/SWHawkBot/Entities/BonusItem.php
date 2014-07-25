@@ -13,6 +13,7 @@ use SWHawkBot\Constants;
  * @author SwHawk
  *
  *         @ORM\MappedSuperClass
+ *         @ORM\EntityListeners({"SWHawkBot\Entities\Listeners\BonusItemListener"})
  */
 class BonusItem extends BuffItem
 {
@@ -43,21 +44,32 @@ class BonusItem extends BuffItem
      * Identifiant du composant d'amélioration 1 pour l'API GuildWars2,
      * null si l'emplacement est vide
      *
-     * @ORM\Column(type="integer", nullable=true)
-     *
      * @var integer|null
      */
     protected $upgradeComponent1Id = null;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="UpgradeComponent", cascade={"persist", "remove"})
+     *
+     * @var UpgradeComponent
+     */
+    protected $upgradeComponent1;
 
     /**
      * Identifiant du composant d'amélioration 2 pour l'API GuildWars2,
      * null si l'emplacement est vide
      *
-     * @ORM\Column(type="integer", nullable=true)
-     *
      * @var integer|null
      */
     protected $upgradeComponent2Id = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="UpgradeComponent", cascade={"persist", "remove"})
+     *
+     * @var UpgradeComponent
+     */
+    protected $upgradeComponent2;
 
     /**
      * Modificateur aux Dégats par altération donné par l'objet
@@ -76,6 +88,15 @@ class BonusItem extends BuffItem
      * @var integer|null
      */
     protected $dureeAvantagesModifier = null;
+
+    /**
+     * Modificateur à la durée des Altérations donné par l'objet
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     *
+     * @var integer|null
+     */
+    protected $dureeAlterationsModifier = null;
 
     /**
      * Modificateur à la Férocité donné par l'objet
@@ -131,16 +152,6 @@ class BonusItem extends BuffItem
      */
     protected $vitaliteModifier = null;
 
-
-
-    /**
-     * Correspondances API/wiki-fr bonus
-     */
-
-    /**
-     * Correspondances API/wiki-fr types d'infusions
-     */
-
     /**
      * Constructeur
      *
@@ -163,8 +174,11 @@ class BonusItem extends BuffItem
         $item_infix_upgrade = $item_specific['infix_upgrade'];
         if (is_array($item_infix_upgrade) && count($item_infix_upgrade)) {
             if (isset($item_infix_upgrade['buff'])) {
-                $this->setBuffSkillId($item_infix_upgrade['buff']['skill_id']);
-                $this->setBuffSkillDescription($item_infix_upgrade['buff']['description']);
+                if ($item_infix_upgrade['buff']['buff_skill_id'] == 16631) {
+                    $this->setDureeAlterationsModifier(10);
+                } elseif ($item_infix_upgrade['buff']['buff_skill_id'] == 16517) {
+                    $this->setDureeAvantageModifier(1);
+                }
             }
             if (isset($item_infix_upgrade['attributes']) && is_array($item_infix_upgrade['attributes']) && count($item_infix_upgrade['attributes'])) {
                 foreach ($item_infix_upgrade['attributes'] as $attribute_array) {
@@ -181,16 +195,18 @@ class BonusItem extends BuffItem
             }
         }
 
-        if (isset($item_specific['suffix_item_id'])) {
+        if (isset($item_specific['suffix_item_id']) && $item_specific['suffix_item_id'] != "") {
             $this->setUpgradeComponent1Id($item_specific['suffix_item_id']);
         }
-        if (isset($item_specific['secondary_suffix_item_id'])) {
+        if (isset($item_specific['secondary_suffix_item_id']) && $item_specific['secondary_suffix_item_id'] != "") {
             $this->setUpgradeComponent2Id($item_specific['second_suffix_item_id']);
         }
         return $this;
     }
 
     /**
+     * Définit le type du premier slot
+     * d'infusion
      *
      * @param string $type
      * @return BonusItem
@@ -206,6 +222,8 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Définit le type du second slot
+     * d'infusion
      *
      * @param string $type
      * @return \SWHawkBot\Entities\BonusItem
@@ -221,6 +239,7 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Définit le modificateur aux dégâts par altération
      *
      * @param integer $modifier
      * @throws \InvalidArgumentException
@@ -236,6 +255,7 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Définit le modificateur à la durée des avantages
      *
      * @param integer $modifier
      * @throws \InvalidArgumentException
@@ -251,6 +271,23 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Définit le modificateur à la durée des altérations
+     *
+     * @param integer $modifier
+     * @throws \InvalidArgumentException
+     * @return BonusItem
+     */
+    public function setDureeAlterationsModifier($modifier)
+    {
+        if (! is_numeric($modifier)) {
+            throw new \InvalidArgumentException('La fonction attend un modifier entier. Modifier donné : ' . var_dump($modifier));
+        }
+        $this->dureeAlterationsModifier = $modifier;
+        return $this;
+    }
+
+    /**
+     * Définit le modificateur à la férocité
      *
      * @param integer $modifier
      * @throws \InvalidArgumentException
@@ -266,6 +303,7 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Définit le modificateur à la guérison
      *
      * @param integer $modifier
      * @throws \InvalidArgumentException
@@ -281,6 +319,7 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Définit le modificateur à la précision
      *
      * @param integer $modifier
      * @throws \InvalidArgumentException
@@ -296,6 +335,7 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Définit le modificateur à la puissance
      *
      * @param integer $modifier
      * @throws \InvalidArgumentException
@@ -311,6 +351,7 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Définit le modificateur à la robustesse
      *
      * @param integer $modifier
      * @throws \InvalidArgumentException
@@ -326,6 +367,7 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Définit le modificateur à la vitalité
      *
      * @param integer $modifier
      * @throws \InvalidArgumentException
@@ -341,6 +383,9 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Définit l'identifiant auprès de l'API
+     * GW2 du composant d'artisanat dans le premier
+     * emplacement d'amélioration
      *
      * @param integer $modifier
      * @throws \InvalidArgumentException
@@ -356,6 +401,22 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Définit le composant d'artisanat présent
+     * dans le premier emplacement d'amélioration
+     *
+     * @param UpgradeComponent $component
+     * @return BonusItem
+     */
+    public function setUpgradeComponent1(UpgradeComponent $component)
+    {
+        $this->upgradeComponent1 = $component;
+        return $this;
+    }
+
+    /**
+     * Définit l'identifiant auprès de l'API
+     * GW2 du composant d'artisanat dans le second
+     * emplacement d'amélioration
      *
      * @param integer $modifier
      * @throws \InvalidArgumentException
@@ -371,6 +432,45 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Définit le composant d'artisanat présent
+     * dans le second emplacement d'amélioration
+     *
+     * @param UpgradeComponent $component
+     * @return \SWHawkBot\Entities\BonusItem
+     */
+    public function setUpgradeComponent2(UpgradeComponent $component)
+    {
+        $this->upgradeComponent2 = $component;
+        return $this;
+    }
+
+    /**
+     * Retourne le type du premier emplacement d'infusion
+     * s'il existe
+     *
+     * @return string|null
+     */
+    public function getInfusionSlot1Type()
+    {
+        return $this->infusionSlot1Type;
+    }
+
+    /**
+     * Retourne le type du second emplacement d'infusion
+     * s'il existe
+     *
+     * @return string|null
+     */
+    public function getInfusionSlot2Type()
+    {
+        return $this->infusionSlot2Type;
+    }
+
+    /**
+     * Renvoie l'identifiant, s'il existe,
+     * auprès de l'API GW2 du composant
+     * présent dans le premier emplacement
+     * d'amélioration
      *
      * @return integer|null
      */
@@ -380,6 +480,21 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Renvoie le composant présent dans le premier
+     * emplacement d'amélioration s'il existe
+     *
+     * @return UpgradeComponent|null
+     */
+    public function getUpgradeComponent1()
+    {
+        return $this->upgradeComponent1;
+    }
+
+    /**
+     * Renvoie l'identifiant, s'il existe,
+     * auprès de l'API GW2 du composant
+     * présent dans le second emplacement
+     * d'amélioration
      *
      * @return integer|null
      */
@@ -389,6 +504,19 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Renvoie le composant présent dans le second
+     * emplacement d'amélioration s'il existe
+     *
+     * @return UpgradeComponent|null
+     */
+    public function getUpgradeComponent2()
+    {
+        return $this->upgradeComponent2;
+    }
+
+    /**
+     * Renvoie le modificateur aux dégâts par
+     * altération
      *
      * @return integer|null
      */
@@ -398,6 +526,8 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * renvoie le modificateur à la durée des
+     * avantages
      *
      * @return integer|null
      */
@@ -407,6 +537,18 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Renvoie le modificateur à la durée
+     * des altérations
+     *
+     * @return integer|null
+     */
+    public function getDureeAlterationsModifier()
+    {
+        return $this->dureeAlterationsModifier;
+    }
+
+    /**
+     * Renvoie le modificateur à la férocité
      *
      * @return integer|null
      */
@@ -416,6 +558,7 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Renvoie le modificateur à la guérison
      *
      * @return integer|null
      */
@@ -425,6 +568,7 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Renvoie le modificateur à la précision
      *
      * @return integer|null
      */
@@ -434,6 +578,7 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Renvoie le modificateur à la puissance
      *
      * @return integer|null
      */
@@ -443,6 +588,7 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Renvoie le modificateur à la robustesse
      *
      * @return integer|null
      */
@@ -452,6 +598,7 @@ class BonusItem extends BuffItem
     }
 
     /**
+     * Renvoie le modificateur à la vitalité
      *
      * @return integer|null
      */
