@@ -8,7 +8,7 @@ use SWHawkBot\Constants;
  * Cette classe *abstraite* représente un objet du jeu donnant des bonus aux
  * différentes caractéristiques d'un joueur.
  * Ces objets peuvent présenter 1 ou
- * 2 slots d'infusions ou 1 ou 2 slots de composants d'amélioration
+ * 2 slots d'infusions et/ou 1 ou 2 slots de composants d'amélioration
  *
  * @author SwHawk
  *
