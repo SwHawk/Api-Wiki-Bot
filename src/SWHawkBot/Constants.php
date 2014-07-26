@@ -204,7 +204,7 @@ abstract class Constants
         "item_flags" => array(
             "soul_binding" => array (
                 "SoulBindOnUse" => "Utilisation",
-                "SoulBindOnAcquire" => "Acquisition",
+                "SoulbindOnAcquire" => "Acquisition",
                 "SoulBind" => "Ame"
             ),
             "account_binding" => array(
