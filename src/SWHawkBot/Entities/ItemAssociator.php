@@ -7,7 +7,8 @@ use SWHawkBot\Factories\ItemFactory;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- *
+ * Classe permettant l'association entre les recettes
+ * et les différents types d'objets
  *
  * @author SwHawk
  *
@@ -37,13 +38,16 @@ class ItemAssociator
     protected $gw2ApiId;
 
     /**
-     * Instace de l'objet contenu dans ce conteneur
+     * Raccourci vers l'objet associé
      *
-     * @var SWHawkBot\Items\Item;
+     * @var Item;
      */
     protected $realItem;
 
     /**
+     * Collection des recettes permettant de produire
+     * l'objet associé
+     *
      * @ORM\OneToMany(targetEntity="Recipe", mappedBy="outputItemAssociator")
      *
      * @var ArrayCollection[Recipe]
@@ -51,6 +55,9 @@ class ItemAssociator
     protected $recipes;
 
     /**
+     * Collection des recettes ayant l'objet associé
+     * comme premier ingrédient
+     *
      * @ORM\OneToMany(targetEntity="Recipe", mappedBy="mat1Associator")
      *
      * @var ArrayCollection[Recipe]
@@ -58,6 +65,9 @@ class ItemAssociator
     protected $mat1Recipes;
 
     /**
+     * Collection des recettes ayant l'objet associé
+     * comme deuxième ingrédient
+     *
      * @ORM\OneToMany(targetEntity="Recipe", mappedBy="mat2Associator")
      *
      * @var ArrayCollection[Recipe]
@@ -65,6 +75,9 @@ class ItemAssociator
     protected $mat2Recipes;
 
     /**
+     * Collection des recettes ayant l'objet associé
+     * comme troisième ingrédient
+     *
      * @ORM\OneToMany(targetEntity="Recipe", mappedBy="mat3Associator")
      *
      * @var ArrayCollection[Recipe]
@@ -72,6 +85,9 @@ class ItemAssociator
     protected $mat3Recipes;
 
     /**
+     * Collection des recettes ayant l'objet associé
+     * comme quatrième ingrédient
+     *
      * @ORM\OneToMany(targetEntity="Recipe", mappedBy="mat4Associator")
      *
      * @var ArrayCollection[Recipe]
@@ -79,6 +95,8 @@ class ItemAssociator
     protected $mat4Recipes;
 
     /**
+     * Pièce d'armure associée
+     *
      * @ORM\OneToOne(targetEntity="Armor", inversedBy="associator", fetch="EAGER")
      *
      * @var Armor
@@ -86,6 +104,8 @@ class ItemAssociator
     protected $armorpiece;
 
     /**
+     * Sac à dos associé
+     *
      * @ORM\OneToOne(targetEntity="Back", inversedBy="associator", fetch="EAGER")
      *
      * @var Back
@@ -93,6 +113,8 @@ class ItemAssociator
     protected $back;
 
     /**
+     * Sac associé
+     *
      * @ORM\OneToOne(targetEntity="Bag", inversedBy="associator", fetch="EAGER")
      *
      * @var Bag
@@ -100,6 +122,8 @@ class ItemAssociator
     protected $bag;
 
     /**
+     * Consommable associé
+     *
      * @ORM\OneToOne(targetEntity="Consumable", inversedBy="associator", fetch="EAGER")
      *
      * @var Consumable
@@ -107,6 +131,8 @@ class ItemAssociator
     protected $consumable;
 
     /**
+     * Conteneur associé
+     *
      * @ORM\OneToOne(targetEntity="Container", inversedBy="associator", fetch="EAGER")
      *
      * @var Container
@@ -114,6 +140,8 @@ class ItemAssociator
     protected $container;
 
     /**
+     * Matériau d'artisanat associé
+     *
      * @ORM\OneToOne(targetEntity="CraftingMaterial", inversedBy="associator", fetch="EAGER")
      *
      * @var CraftingMaterial
@@ -121,6 +149,8 @@ class ItemAssociator
     protected $craftingMaterial;
 
     /**
+     * Gizmo associé
+     *
      * @ORM\OneToOne(targetEntity="Gizmo", inversedBy="associator", fetch="EAGER")
      *
      * @var Gizmo
@@ -128,6 +158,8 @@ class ItemAssociator
     protected $gizmo;
 
     /**
+     * Accessoire associé
+     *
      * @ORM\OneToOne(targetEntity="Trinket", inversedBy="associator", fetch="EAGER")
      *
      * @var Trinket
@@ -135,6 +167,8 @@ class ItemAssociator
     protected $trinket;
 
     /**
+     * Trophée associé
+     *
      * @ORM\OneToOne(targetEntity="Trophy", inversedBy="associator", fetch="EAGER")
      *
      * @var Trophy
@@ -142,6 +176,8 @@ class ItemAssociator
     protected $trophy;
 
     /**
+     * Composant d'amélioration associé
+     *
      * @ORM\OneToOne(targetEntity="UpgradeComponent", inversedBy="associator", fetch="EAGER")
      *
      * @var UpgradeComponent
@@ -149,6 +185,8 @@ class ItemAssociator
     protected $upgradeComponent;
 
     /**
+     * Arme associée
+     *
      * @ORM\OneToOne(targetEntity="Weapon", inversedBy="associator", fetch="EAGER")
      *
      * @var Weapon
@@ -156,8 +194,8 @@ class ItemAssociator
     protected $weapon;
 
     /**
-     * Constructeur de l'objet, possiblement à partir d'un array
-     * provenant de l'API GuildWars2
+     * Constructeur de l'objet, à partir d'une
+     * instance d'un objet du modèle de données
      *
      * @param array $item|null
      * @return Item
@@ -206,6 +244,11 @@ class ItemAssociator
             $this->setCraftingMaterial($item);
         }
 
+        if ($item instanceof Gizmo)
+        {
+            $this->setGizmo($item);
+        }
+
         if ($item instanceof Trinket)
         {
             $this->setTrinket($item);
@@ -232,6 +275,7 @@ class ItemAssociator
     }
 
     /**
+     * Définit l'objet associé
      *
      * @param Item $item
      * @return \SWHawkBot\Entities\ItemAssociator
@@ -242,6 +286,14 @@ class ItemAssociator
         return $this;
     }
 
+    /**
+     * Définit l'identifiant auprès de l'API GW2
+     * de l'objet associé
+     *
+     * @param integer $id
+     * @throws \InvalidArgumentException
+     * @return ItemAssociator
+     */
     public function setGw2ApiId($id)
     {
         if (!is_int($id))
@@ -252,72 +304,142 @@ class ItemAssociator
         return $this;
     }
 
+    /**
+     * Définit la pièce d'armure associée
+     *
+     * @param Armor $armor
+     * @return ItemAssociator
+     */
     public function setArmorpiece(Armor $armor)
     {
         $this->armorpiece = $armor;
-        return $this->armorpiece;
+        return $this;
     }
 
+    /**
+     * Définit le sac à dos associé
+     *
+     * @param Back $back
+     * @return ItemAssociator
+     */
     public function setBack(Back $back)
     {
         $this->back = $back;
         return $this;
     }
 
+    /**
+     * Définit le sac associé
+     *
+     * @param Bag $bag
+     * @return ItemAssociator
+     */
     public function setBag(Bag $bag)
     {
         $this->bag = $bag;
         return $this;
     }
 
+    /**
+     * Définit le consommable associé
+     *
+     * @param Consumable $consumable
+     * @return ItemAssociator
+     */
     public function setConsumable(Consumable $consumable)
     {
         $this->consumable = $consumable;
         return $this;
     }
 
+    /**
+     * Définit le conteneur associé
+     *
+     * @param Container $container
+     * @return \SWHawkBot\Entities\ItemAssociator
+     */
     public function setContainer(Container $container)
     {
         $this->container = $container;
         return $this;
     }
 
+    /**
+     * Définit le matériau d'artisanat associé
+     *
+     * @param CraftingMaterial $material
+     * @return ItemAssociator
+     */
     public function setCraftingMaterial(CraftingMaterial $material)
     {
         $this->craftingMaterial = $material;
         return $this;
     }
 
-    public function setGuizmo(Gizmo $gizmo)
+    /**
+     * Définit le gizmo associé
+     *
+     * @param Gizmo $gizmo
+     * @return \SWHawkBot\Entities\ItemAssociator
+     */
+    public function setGizmo(Gizmo $gizmo)
     {
         $this->gizmo = $gizmo;
         return $this;
     }
 
+    /**
+     * Définit l'accessoire associé
+     *
+     * @param Trinket $trinket
+     * @return ItemAssociator
+     */
     public function setTrinket(Trinket $trinket)
     {
         $this->trinket = $trinket;
         return $this;
     }
 
+    /**
+     * Définit le trophée associé
+     *
+     * @param Trophy $trophy
+     * @return ItemAssociator
+     */
     public function setTrophy(Trophy $trophy)
     {
         $this->trophy = $trophy;
         return $this;
     }
 
+    /**
+     * Définit le composant d'amélioration associé
+     *
+     * @param UpgradeComponent $component
+     * @return \SWHawkBot\Entities\ItemAssociator
+     */
     public function setUpgradeComponent(UpgradeComponent $component)
     {
         $this->upgradeComponent = $component;
         return $this;
     }
 
+    /**
+     * Définit l'arme associée
+     *
+     * @param Weapon $weapon
+     * @return \SWHawkBot\Entities\ItemAssociator
+     */
     public function setWeapon(Weapon $weapon)
     {
         $this->weapon = $weapon;
         return $this;
     }
 
+    /**
+     * Initialise le raccourci vers l'objet
+     * associé
+     */
     private function initRealItem()
     {
         if (!is_null($this->getArmorpiece())) {
@@ -366,6 +488,8 @@ class ItemAssociator
     }
 
     /**
+     * Retourne l'identifiant de l'associator
+     * en base de données
      *
      * @return int
      */
@@ -374,17 +498,33 @@ class ItemAssociator
         return $this->id;
     }
 
+    /**
+     * Retourne l'identifiant de l'objet
+     * associé auprès de l'API GW2
+     *
+     * @return number
+     */
     public function getGw2ApiId()
     {
         return $this->gw2ApiId;
     }
 
+    /**
+     * Retourne la collection de recettes
+     * permettant de produire l'objet
+     * associé
+     *
+     * @return ArrayCollection[Recipe]
+     */
     public function getRecipes()
     {
         return $this->recipes;
     }
 
     /**
+     * Retourne la collection de recettes
+     * ayant l'objet associé comme premier
+     * ingrédient
      *
      * @return Recipe[]
      */
@@ -394,6 +534,9 @@ class ItemAssociator
     }
 
     /**
+     * Retourne la collection de recettes
+     * ayant l'objet associé comme second
+     * ingrédient
      *
      * @return Recipe[]
      */
@@ -403,6 +546,9 @@ class ItemAssociator
     }
 
     /**
+     * Retourne la collection de recettes
+     * ayant l'objet associé comme troisième
+     * ingrédient
      *
      * @return Recipe[]
      */
@@ -412,6 +558,9 @@ class ItemAssociator
     }
 
     /**
+     * Retourne la collection de recettes
+     * ayant l'objet associé comme quatrième
+     * ingrédient
      *
      * @return Recipe[]
      */
@@ -420,6 +569,14 @@ class ItemAssociator
         return $this->mat4Recipes;
     }
 
+    /**
+     * Ajoute une recette à la collection des
+     * recettes permettant de produire l'objet
+     * associé
+     *
+     * @param Recipe $recipe
+     * @return \SWHawkBot\Entities\ItemAssociator
+     */
     public function addRecipe(Recipe $recipe)
     {
         $this->recipes->add($recipe);
@@ -427,6 +584,9 @@ class ItemAssociator
     }
 
     /**
+     * Ajoute une recette à la collection des
+     * recettant ayant l'objet associé comme
+     * premier ingrédient
      *
      * @param Recipe $recipe
      * @return ItemAssociator
@@ -438,6 +598,9 @@ class ItemAssociator
     }
 
     /**
+     * Ajoute une recette à la collection des
+     * recettant ayant l'objet associé comme
+     * second ingrédient
      *
      * @param Recipe $recipe
      * @return ItemAssociator
@@ -449,6 +612,9 @@ class ItemAssociator
     }
 
     /**
+     * Ajoute une recette à la collection des
+     * recettant ayant l'objet associé comme
+     * troisième ingrédient
      *
      * @param Recipe $recipe
      * @return ItemAssociator
@@ -460,6 +626,9 @@ class ItemAssociator
     }
 
     /**
+     * Ajoute une recette à la collection des
+     * recettant ayant l'objet associé comme
+     * quatrième ingrédient
      *
      * @param Recipe $recipe
      * @return ItemAssociator
@@ -470,61 +639,123 @@ class ItemAssociator
         return $this;
     }
 
+    /**
+     * Retourne la pièce d'amure associée
+     *
+     * @return Armor
+     */
     public function getArmorpiece()
     {
         return $this->armorpiece;
     }
 
+    /**
+     * Retourne le sac à dos associé
+     *
+     * @return Back
+     */
     public function getBack()
     {
         return $this->back;
     }
 
+    /**
+     * Retourne le sac associé
+     *
+     * @return Bag
+     */
     public function getBag()
     {
         return $this->bag;
     }
 
+    /**
+     * Retourne le consommable associé
+     *
+     * @return Consumable
+     */
     public function getConsumable()
     {
         return $this->consumable;
     }
 
+    /**
+     * Retourne le conteneur associé
+     *
+     * @return Container
+     */
     public function getContainer()
     {
         return $this->container;
     }
 
+    /**
+     * Retourne le matériau d'artisanat
+     * associé
+     *
+     * @return CraftingMaterial
+     */
     public function getCraftingMaterial()
     {
         return $this->craftingMaterial;
     }
 
+    /**
+     * Retourne le Gizmo associé
+     *
+     * @return Gizmo
+     */
     public function getGizmo()
     {
         return $this->gizmo;
     }
 
+    /**
+     * Retourne l'accessoire associé
+     *
+     * @return Trinket
+     */
     public function getTrinket()
     {
         return $this->trinket;
     }
 
+    /**
+     * Retourne le trophée associé
+     *
+     * @return Trophy
+     */
     public function getTrophy()
     {
         return $this->trophy;
     }
 
+    /**
+     * Renvoie le composant d'artisanat associé
+     *
+     * @return UpgradeComponent
+     */
     public function getUpgradeComponent()
     {
         return $this->upgradeComponent;
     }
 
+    /**
+     * Renvoie l'arme associée
+     *
+     * @return Weapon
+     */
     public function getWeapon()
     {
         return $this->weapon;
     }
 
+    /**
+     * Renvoie le raccourci vers l'objet associé
+     * et l'initialise si nécessaire
+     *
+     * @return Item;
+     */
     public function getRealItem()
     {
         if (is_null($this->realItem)) {
