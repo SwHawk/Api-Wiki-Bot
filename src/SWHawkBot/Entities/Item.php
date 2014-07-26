@@ -13,7 +13,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @author SwHawk
  *
  *         @ORM\MappedSuperClass
- *
  */
 class Item
 {
