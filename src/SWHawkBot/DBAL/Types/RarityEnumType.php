@@ -3,6 +3,7 @@
 namespace SWHawkBot\DBAL\Types;
 
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 class RarityEnumType extends Type
 {
@@ -12,7 +13,7 @@ class RarityEnumType extends Type
         "Déchet",
         "Simple",
         "Raffiné",
-        "Chef-d'œuvre",
+        'Chef-d\'œuvre',
         "Rare",
         "Exotique",
         "Elevé",
@@ -23,7 +24,7 @@ class RarityEnumType extends Type
     {
         $values = array_map(function($val) { return "'".$val."'"; }, $this->values);
 
-        return "ENUM(".implode(", ", $values).") COMMENT '(DC2Type:".$this->name.")'";
+        return "ENUM('Déchet', 'Simple', 'Raffiné', 'Chef-d\'œuvre', 'Rare', 'Exotique', 'Elevé', 'Légendaire' ) COMMENT '(DC2Type:".$this->name.")'";
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
