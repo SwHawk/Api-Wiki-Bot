@@ -81,7 +81,7 @@ class Item
      * Valeurs possibles : Déchet, Simple, Raffiné, Chef d'oeuvre, Rare,
      * Exotique, Elevé, Légendaire
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="rarityenum")
      *
      * @var string
      */
