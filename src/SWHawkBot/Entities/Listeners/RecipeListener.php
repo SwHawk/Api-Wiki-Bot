@@ -28,12 +28,11 @@ class RecipeListener
                     throw new \Exception("l'outputitem ayant pour id d'aPI : ".$outputItemId." n'a pas son type défini correctement");
                 }
                 $em->persist($item);
-                $itemAssociator = new ItemAssociator($item);
-                $em->persist($itemAssociator);
-                $recipe->setOutputItemAssociator($itemAssociator);
-            } else {
-                $recipe->setOutputItemAssociator($associator);
+                $associator = new ItemAssociator($item);
+                $em->persist($associator);
+                $item->setAssociator($associator);
             }
+            $recipe->setOutputItemAssociator($associator);
             $ingredientsId = array();
             for ($i = 1 ; $i < 5 ; $i++)
             {
@@ -60,6 +59,7 @@ class RecipeListener
                     $em->persist($ingredient);
                     $ingredientAssociator = new ItemAssociator($ingredient);
                     $em->persist($ingredientAssociator);
+                    $ingredient->setAssociator($ingredientAssociator);
                 }
                 $associatorSetter = "setMat".($ingredientNumber + 1)."Associator";
                 $recipe->$associatorSetter($ingredientAssociator);
@@ -74,11 +74,8 @@ class RecipeListener
 
     public function postPersist(Recipe $recipe, LifecycleEventArgs $event)
     {
-        $em = $event->getEntityManager();
-        $outputItemId = $recipe->getOutputItemId();
-        $associatorRepo = $em->getRepository("SWHawkBot\Entities\ItemAssociator");
-        $itemAssociator = $associatorRepo->findOneBy(array('gw2ApiId' => $outputItemId));
-        $itemAssociator->addRecipe($recipe);
+        $outputItemAssociator = $recipe->getOutputItemAssociator();
+        $outputItemAssociator->addRecipe($recipe);
         for ($i = 1 ; $i < 5 ; $i++)
         {
             $ingredientAssociatorGetter = "getMat".$i."Associator";
