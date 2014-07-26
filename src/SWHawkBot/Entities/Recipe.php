@@ -11,7 +11,7 @@ use SWHawkBot\Constants;
  *
  * @author SwHawk
  *
- *         @ORM\Entity
+ *         @ORM\Entity(repositoryClass="SWHawkBot\Entities\Repositories\RecipeRepository")
  *         @ORM\Table(name="Recipes")
  *         @ORM\EntityListeners({"SWHawkBot\Entities\Listeners\RecipeListener"})
  */
@@ -117,6 +117,15 @@ class Recipe
     protected $mat1;
 
     /**
+     * Identifiant auprès de l'API
+     * GW2 du premier ingrédient de
+     * la recette
+     *
+     * @var integer
+     */
+    protected $mat1Id;
+
+    /**
      * Quantité nécessaire du premier ingrédient
      *
      * @ORM\Column(type="integer")
@@ -141,6 +150,15 @@ class Recipe
      * @var Item
      */
     protected $mat2;
+
+    /**
+     * Identifiant auprès de l'API
+     * GW2 du second ingrédient de
+     * la recette
+     *
+     * @var integer
+     */
+    protected $mat2Id;
 
     /**
      * Quantité nécessaire du deuxième ingrédient
@@ -169,6 +187,15 @@ class Recipe
     protected $mat3;
 
     /**
+     * Identifiant auprès de l'API
+     * GW2 du troisième ingrédient de
+     * la recette
+     *
+     * @var integer
+     */
+    protected $mat3Id;
+
+    /**
      * Quantité nécessaire du troisième ingrédient
      *
      * @ORM\Column(type="integer", nullable=true)
@@ -193,6 +220,15 @@ class Recipe
      * @var Item
      */
     protected $mat4;
+
+    /**
+     * Identifiant auprès de l'API
+     * GW2 du quatrième ingrédient de
+     * la recette
+     *
+     * @var integer
+     */
+    protected $mat4Id;
 
     /**
      * Quantité nécessaire du quatrième ingrédient
@@ -270,6 +306,8 @@ class Recipe
     }
 
     /**
+     * Définit l'identifiant de la recette auprès
+     * de l'API GW2
      *
      * @param integer $id
      * @throws \InvalidArgumentException
@@ -285,6 +323,7 @@ class Recipe
     }
 
     /**
+     * Définit le type de la recette
      *
      * @param string $type
      * @return Recipe
@@ -303,7 +342,8 @@ class Recipe
 
 
     /**
-     *
+     * Définit l'identifiant auprès de l'API
+     * GW2 du produit de la recette
      *
      * @param integer $id
      * @return \SWHawkBot\Entities\Recipe
@@ -318,12 +358,26 @@ class Recipe
         return $this;
     }
 
+    /**
+     * Définit l'associator de l'objet produit
+     * par la recette
+     *
+     * @param ItemAssociator $associator
+     * @return Recipe
+     */
     public function setOutputItemAssociator(ItemAssociator $associator)
     {
         $this->outputItemAssociator = $associator;
         return $this;
     }
 
+    /**
+     * Définit le raccourci vers l'objet
+     * produit
+     *
+     * @param Item $item
+     * @return Recipe
+     */
     public function setOutputItem(Item $item)
     {
         $this->outputItem = $item;
@@ -331,6 +385,7 @@ class Recipe
     }
 
     /**
+     * Définit le nombre d'objets produits
      *
      * @param integer $count
      * @throws \InvalidArgumentException
@@ -346,6 +401,7 @@ class Recipe
     }
 
     /**
+     * Définit la difficulté de la recette
      *
      * @param integer $difficulty
      * @throws \InvalidArgumentException
@@ -361,6 +417,8 @@ class Recipe
     }
 
     /**
+     * Définit le type de découverte de la
+     * recette
      *
      * @param string $type
      * @param string $discovery
@@ -388,6 +446,8 @@ class Recipe
     }
 
     /**
+     * Définit l'identifiant auprès de l'API
+     * GW2 du premier ingrédient de la recette
      *
      * @param integer $id
      * @throws \InvalidArgumentException
@@ -403,6 +463,8 @@ class Recipe
     }
 
     /**
+     * Définit l'associator du premier ingrédient
+     * de la recette
      *
      * @param ItemAssociator $associator
      * @return Recipe
@@ -414,6 +476,21 @@ class Recipe
     }
 
     /**
+     * Définit le raccourci vers le premier
+     * ingrédient de la recette
+     *
+     * @param Item $ingredient
+     * @return Recipe
+     */
+    public function setMat1(Item $ingredient)
+    {
+        $this->mat1 = $ingredient;
+        return $this;
+    }
+
+    /**
+     * Définit la quantité nécessaire en
+     * premier ingrédient
      *
      * @param integer $qty
      * @throws \InvalidArgumentException
@@ -429,6 +506,8 @@ class Recipe
     }
 
     /**
+     * Définit l'identifiant auprès de l'API
+     * GW2 du second ingrédient de la recette
      *
      * @param integer $id
      * @throws \InvalidArgumentException
@@ -444,6 +523,8 @@ class Recipe
     }
 
     /**
+     * Définit l'associator du second ingrédient
+     * de la recette
      *
      * @param ItemAssociator $associator
      * @return Recipe
@@ -455,6 +536,21 @@ class Recipe
     }
 
     /**
+     * Définit le raccourci vers le second
+     * ingrédient de la recette
+     *
+     * @param Item $ingredient
+     * @return Recipe
+     */
+    public function setMat2(Item $ingredient)
+    {
+        $this->mat2 = $ingredient;
+        return $this;
+    }
+
+    /**
+     * Définit la quantité nécessaire en
+     * second ingrédient
      *
      * @param integer $qty
      * @throws \InvalidArgumentException
@@ -470,6 +566,8 @@ class Recipe
     }
 
     /**
+     * Définit l'identifiant auprès de l'API
+     * GW2 du troisième ingrédient de la recette
      *
      * @param integer $id
      * @throws \InvalidArgumentException
@@ -485,6 +583,8 @@ class Recipe
     }
 
     /**
+     * Définit l'associator du troisième ingrédient
+     * de la recette
      *
      * @param ItemAssociator $associator
      * @return Recipe
@@ -496,6 +596,21 @@ class Recipe
     }
 
     /**
+     * Définit le raccourci vers le troisième
+     * ingrédient de la recette
+     *
+     * @param Item $ingredient
+     * @return Recipe
+     */
+    public function setMat3(Item $ingredient)
+    {
+        $this->mat3 = $ingredient;
+        return $this;
+    }
+
+    /**
+     * Définit la quantité nécessaire en
+     * troisième ingrédient
      *
      * @param integer $qty
      * @throws \InvalidArgumentException
@@ -511,6 +626,8 @@ class Recipe
     }
 
     /**
+     * Définit l'identifiant auprès de l'API
+     * GW2 du quatrième ingrédient de la recette
      *
      * @param integer $id
      * @throws \InvalidArgumentException
@@ -526,6 +643,8 @@ class Recipe
     }
 
     /**
+     * Définit l'associator du quatrième ingrédient
+     * de la recette
      *
      * @param ItemAssociator $associator
      * @return Recipe
@@ -537,6 +656,21 @@ class Recipe
     }
 
     /**
+     * Définit le raccourci vers le premier
+     * ingrédient de la recette
+     *
+     * @param Item $ingredient
+     * @return Recipe
+     */
+    public function setMat4(Item $ingredient)
+    {
+        $this->mat4 = $ingredient;
+        return $this;
+    }
+
+    /**
+     * Définit la quantité nécessaire en
+     * quatrième ingrédient
      *
      * @param integer $qty
      * @throws \InvalidArgumentException
@@ -552,6 +686,8 @@ class Recipe
     }
 
     /**
+     * Définit les disciplines d'artisanat
+     * de la recette
      *
      * @param array $disciplines
      * @return Recipe
@@ -569,6 +705,8 @@ class Recipe
     }
 
     /**
+     * Retourne l'identifiant de la recette
+     * en base de données
      *
      * @return integer
      */
@@ -578,6 +716,8 @@ class Recipe
     }
 
     /**
+     * Retourne l'identifiant de la recette
+     * auprès de l'API GW2
      *
      * @return integer
      */
@@ -587,6 +727,7 @@ class Recipe
     }
 
     /**
+     * Retourne le type de la recette
      *
      * @return string
      */
@@ -595,22 +736,45 @@ class Recipe
         return $this->type;
     }
 
+    /**
+     * Retourne l'identifiant auprès de l'API
+     * GW2 de la recette
+     *
+     * @return integer
+     */
     public function getOutputItemId()
     {
         return $this->outputItemId;
     }
 
+    /**
+     * Retourne l'associator de l'objet produit
+     * par la recette
+     *
+     * @return \SWHawkBot\Entities\ItemAssociator
+     */
     public function getOutputItemAssociator()
     {
         return $this->outputItemAssociator;
     }
 
+    /**
+     * Retourne l'objet produit par la recette, et
+     * l'initialise au besoin
+     *
+     * @return \SWHawkBot\Entities\Item
+     */
     public function getOutputItem()
     {
+        if(is_null($this->outputItem)) {
+            $this->initOutputItem();
+        }
         return $this->outputItem;
     }
 
     /**
+     * Retourne le nombre d'objets produits
+     * par la recette
      *
      * @return integer
      */
@@ -620,6 +784,7 @@ class Recipe
     }
 
     /**
+     * Retourne la difficulté de la recette
      *
      * @return integer
      */
@@ -629,8 +794,10 @@ class Recipe
     }
 
     /**
+     * Retourne les disciplines d'artisanat
+     * de la recette
      *
-     * @return array
+     * @return string
      */
     public function getDisciplines()
     {
@@ -638,6 +805,8 @@ class Recipe
     }
 
     /**
+     * Retourne l'identifiant auprès de l'API
+     * GW2 du premier ingrédient de la recette
      *
      * @return integer
      */
@@ -647,6 +816,8 @@ class Recipe
     }
 
     /**
+     * Retourne l'associator du premier
+     * ingrédient de la recette
      *
      * @return ItemAssociator
      */
@@ -656,6 +827,32 @@ class Recipe
     }
 
     /**
+     * Retourne le premier ingrédient de
+     * la recette et l'initialise au besoin
+     *
+     * @return Item
+     */
+    public function getMat1()
+    {
+        if (is_null($this->mat1))
+        {
+            $this->initMat1();
+        }
+        return $this->mat1;
+    }
+
+    /**
+     * Initialise le raccourci vers le
+     * premier ingrédient de la recette
+     */
+    private function initMat1()
+    {
+        $this->mat1 = $this->getMat1Associator()->getRealItem();
+    }
+
+    /**
+     * Renvoie la quantité nécessaire en
+     * premier ingrédient
      *
      * @return integer
      */
@@ -665,6 +862,8 @@ class Recipe
     }
 
     /**
+     * Retourne l'identifiant auprès de l'API
+     * GW2 du second ingrédient de la recette
      *
      * @return integer|null
      */
@@ -674,6 +873,8 @@ class Recipe
     }
 
     /**
+     * Retourne l'associator du second
+     * ingrédient de la recette
      *
      * @return ItemAssociator
      */
@@ -683,6 +884,32 @@ class Recipe
     }
 
     /**
+     * Retourne le second ingrédient de
+     * la recette et l'initialise au besoin
+     *
+     * @return Item
+     */
+    public function getMat2()
+    {
+        if ((! is_null($this->getMat2Associator())) && is_null($this->mat2))
+        {
+            $this->initMat2();
+        }
+        return $this->mat2;
+    }
+
+    /**
+     * Initialise le raccourci vers le
+     * second ingrédient de la recette
+     */
+    private function initMat2()
+    {
+        $this->mat2 = $this->getMat2Associator()->getRealItem();
+    }
+
+    /**
+     * Renvoie la quantité nécessaire en
+     * second ingrédient
      *
      * @return integer|null
      */
@@ -692,6 +919,8 @@ class Recipe
     }
 
     /**
+     * Retourne l'identifiant auprès de l'API
+     * GW2 du troisième ingrédient de la recette
      *
      * @return integer|null
      */
@@ -701,6 +930,8 @@ class Recipe
     }
 
     /**
+     * Retourne l'associator du troisième
+     * ingrédient de la recette
      *
      * @return ItemAssociator
      */
@@ -710,6 +941,32 @@ class Recipe
     }
 
     /**
+     * Retourne le troisième ingrédient de
+     * la recette et l'initialise au besoin
+     *
+     * @return Item
+     */
+    public function getMat3()
+    {
+        if ((! is_null($this->getMat3Associator())) && is_null($this->mat3))
+        {
+            $this->initMat3();
+        }
+        return $this->mat3;
+    }
+
+    /**
+     * Initialise le raccourci vers le
+     * troisième ingrédient de la recette
+     */
+    private function initMat3()
+    {
+        $this->mat3 = $this->getMat3Associator()->getRealItem();
+    }
+
+    /**
+     * Renvoie la quantité nécessaire en
+     * troisième ingrédient
      *
      * @return integer|null
      */
@@ -719,6 +976,8 @@ class Recipe
     }
 
     /**
+     * Retourne l'identifiant auprès de l'API
+     * GW2 du quatrième ingrédient de la recette
      *
      * @return integer|null
      */
@@ -728,6 +987,8 @@ class Recipe
     }
 
     /**
+     * Retourne l'associator du quatrième
+     * ingrédient de la recette
      *
      * @return ItemAssociator
      */
@@ -735,8 +996,33 @@ class Recipe
     {
         return $this->mat4Associator;
     }
+    /**
+     * Retourne le quatrième ingrédient de
+     * la recette et l'initialise au besoin
+     *
+     * @return Item
+     */
+    public function getMat4()
+    {
+        if ((! is_null($this->getMat4Associator())) && is_null($this->mat4))
+        {
+            $this->initMat4();
+        }
+        return $this->mat4;
+    }
 
     /**
+     * Initialise le raccourci vers le
+     * quatrième ingrédient de la recette
+     */
+    private function initMat4()
+    {
+        $this->mat4 = $this->getMat4Associator()->getRealItem();
+    }
+
+    /**
+     * Renvoie la quantité nécessaire en
+     * quatrième ingrédient
      *
      * @return integer|null
      */
@@ -746,6 +1032,8 @@ class Recipe
     }
 
     /**
+     * Renvoie la méthode de dévouverte
+     * de la recette
      *
      * @return string
      */
@@ -753,8 +1041,6 @@ class Recipe
     {
         return $this->discovery;
     }
-
-
 }
 
 ?>
