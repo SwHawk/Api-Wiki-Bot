@@ -37,5 +37,16 @@ class Trinket extends BonusItem
             return $this;
         }
     }
+
+    public function createWikiText()
+    {
+        $wikitext =
+        "<nowiki>\n{{Infobox d'accessoire\n".
+        "| nom = ".$this->getName().
+        "| description =".
+        "| niveau = ".$this->getLevel().
+        "| rareté = ".$this->getRarity().
+        "| lié = ".$this->getSoulbind()." ".$this->getAccountbind();
+    }
 }
 ?>

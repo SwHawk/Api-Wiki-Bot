@@ -21,7 +21,7 @@ class CraftingMaterial extends Item
      *
      * @var array
      */
-    protected $prerequisites;
+    protected $prerequisites = array();
 
     /**
      * Constructeur appelant le constructeur de la
@@ -48,7 +48,10 @@ class CraftingMaterial extends Item
      */
     public function setPrerequisites(array $prerequisites)
     {
-        $this->prerequisites = $prerequisites;
+        foreach($prerequisites as $discipline => $difficulty)
+        {
+            $this->prerequisites[$discipline] = $difficulty;
+        }
         return $this;
     }
 

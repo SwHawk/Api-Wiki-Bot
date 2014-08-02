@@ -5,6 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 use SWHawkBot\Constants;
 use SWHawkBot\Factories\ItemFactory;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Util\Debug;
 
 /**
  * Classe permettant l'association entre les recettes
@@ -36,6 +37,34 @@ class ItemAssociator
      * @var int
      */
     protected $gw2ApiId;
+
+    /**
+     * Nom de l'objet associé
+     *
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
+    protected $itemName;
+
+
+    /**
+     * Rareté de l'objet associé
+     *
+     * @ORM\Column(type="rarityenum")
+     *
+     * @var string
+     */
+    protected $itemRarity;
+
+    /**
+     * Niveau de l'objet associé
+     *
+     * @ORM\Column(type="integer")
+     *
+     * @var integer
+     */
+    protected $itemLevel;
 
     /**
      * Raccourci vers l'objet associé
@@ -213,6 +242,9 @@ class ItemAssociator
         }
 
         $this->setGw2ApiId($item->getGw2ApiId());
+        $this->setItemName($item->getName());
+        $this->setItemRarity($item->getRarity());
+        $this->setItemLevel($item->getLevel());
 
         if ($item instanceof Armor)
         {
@@ -301,6 +333,52 @@ class ItemAssociator
             throw new \InvalidArgumentException('La fonction attend un id entier. Id donné : '.var_dump($id));
         }
         $this->gw2ApiId = $id;
+        return $this;
+    }
+
+    /**
+     * Définit le nom de l'objet associé
+     *
+     * @param string $name
+     * @return ItemAssociator
+     */
+    public function setItemName($name)
+    {
+        $this->itemName = $name;
+        return $this;
+    }
+
+    /**
+     * Définit la rareté de l'objet associé
+     *
+     * @param string $rarity
+     * @return ItemAssociator
+     */
+    public function setItemRarity($rarity)
+    {
+        if (array_key_exists($rarity, Constants::$translation['rarity'])) {
+            $this->itemRarity = Constants::$translation['rarity'][$rarity];
+            return $this;
+        } elseif(in_array($rarity, Constants::$translation['rarity'])) {
+            $this->itemRarity = $rarity;
+            return $this;
+        }
+    }
+
+    /**
+     * Définit le niveau nécessaire pour
+     * l'objet associé
+     *
+     * @param integer $level
+     * @throws \InvalidArgumentException
+     * @return ItemAssociator
+     */
+    public function setItemLevel($level)
+    {
+        if (!is_numeric($level)) {
+            throw new \InvalidArgumentException("La fonction attend un niveau entier. Niveau donné :".var_dump($level));
+        }
+        $this->itemLevel = $level;
         return $this;
     }
 
@@ -507,6 +585,38 @@ class ItemAssociator
     public function getGw2ApiId()
     {
         return $this->gw2ApiId;
+    }
+
+    /**
+     * Retourne le nom de l'objet associé
+     *
+     * @return string
+     */
+    public function getItemName()
+    {
+        return $this->itemName;
+    }
+
+
+    /**
+     * Retourne la rareté de l'objet associé
+     *
+     * @return string
+     */
+    public function getItemRarity()
+    {
+        return $this->itemRarity;
+    }
+
+    /**
+     * Retourne le niveau nécessaire
+     * pour l'objet associé
+     *
+     * @return integer
+     */
+    public function getItemLevel()
+    {
+        return $this->itemLevel;
     }
 
     /**

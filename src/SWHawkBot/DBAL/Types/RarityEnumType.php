@@ -35,6 +35,7 @@ class RarityEnumType extends Type
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if (!in_array($value, $this->values)) {
+            echo "Rareté transmise en argument : ".$value."\n";
             throw new \InvalidArgumentException("Rareté Invalide");
         }
         return $value;

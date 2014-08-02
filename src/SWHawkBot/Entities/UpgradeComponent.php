@@ -12,7 +12,7 @@ use SWHawkBot\Constants;
  * @ORM\Entity
  * @ORM\Table(name="UpgradeComponents")
  */
-class UpgradeComponent extends BuffItem
+class UpgradeComponent extends BonusItem
 {
     /**
      * Types d'objets sur lesquels le composant

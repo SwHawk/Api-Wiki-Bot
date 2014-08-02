@@ -194,12 +194,21 @@ abstract class Constants
         ),
         "attributes_modifier_functions" => array(
             "ConditionDamage" => "setDegatsAlterationModifier",
+            "Dégâts par altération" => "setDegatsAlterationModifier",
             "CritDamage" => "setFerociteModifier",
+            "Férocité" => "setFerociteModifier",
             "Healing" => "setGuerisonModifier",
+            "Guérison" => "setGuerisonModifier",
             "Power" => "setPuissanceModifier",
+            "Puissance" => "setPuissanceModifier",
             "Precision" => "setPrecisionModifier",
+            "Précision" => "setPrecisionModifier",
             "Toughness" => "setRobustesseModifier",
-            "Vitality" => "setVitaliteModifier"
+            "Robustesse" => "setRobustesseModifier",
+            "Vitality" => "setVitaliteModifier",
+            "Vitalité" => "setVitaliteModifier",
+            "Durée d'avantage" => "setDureeAvantageModifier",
+            "Durée d'altération" => "setDureeAlterationModifier"
         ),
         "item_flags" => array(
             "soul_binding" => array (

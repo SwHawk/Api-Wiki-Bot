@@ -168,6 +168,13 @@ class Item
     protected $recipesUsedIn;
 
     /**
+     * Texte du wiki correspondant à l'objet
+     *
+     * @var string
+     */
+    protected $wikiText;
+
+    /**
      * Constructeur de l'objet, possiblement à partir d'un array
      * provenant de l'API GuildWars2
      *
@@ -414,6 +421,18 @@ class Item
     }
 
     /**
+     * Définit le wikitext de l'objet
+     *
+     * @param unknown $wikitext
+     * @return \SWHawkBot\Entities\Item
+     */
+    public function setWikiText($wikitext)
+    {
+        $this->wikitext = $wikitext;
+        return $this;
+    }
+
+    /**
      * Renvoie l'Id de l'objet en BDD
      *
      * @return int
@@ -556,8 +575,10 @@ class Item
      */
     public function getRecipes()
     {
-        if ($this->recipes->isEmpty())
-        {
+        if (is_null($this->recipes)){
+            $this->recipes = new ArrayCollection();
+        }
+        if ($this->recipes->isEmpty()) {
             $this->initRecipes();
         }
         return $this->recipes;
@@ -593,6 +614,10 @@ class Item
      */
     public function getRecipesUsedIn()
     {
+        if (is_null($this->recipesUsedIn))
+        {
+            $this->recipesUsedIn = new ArrayCollection();
+        }
         if ($this->recipesUsedIn->isEmpty())
         {
             $this->initUsedInRecipes();
@@ -630,6 +655,16 @@ class Item
     {
         $this->recipesUsedIn->add($recipe);
         return $this;
+    }
+
+    /**
+     * Retourne le wikitext de l'objet
+     *
+     * @return string
+     */
+    public function getWikiText()
+    {
+        return $this->wikiText;
     }
 }
 

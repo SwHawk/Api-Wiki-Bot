@@ -81,22 +81,22 @@ class BonusItem extends BuffItem
     protected $degatsAlterationModifier = null;
 
     /**
-     * Modificateur à la Durée des Avantages donné par l'objet
+     * Modificateur à la Durée d'avantage donné par l'objet
      *
      * @ORM\Column(type="integer", nullable=true)
      *
      * @var integer|null
      */
-    protected $dureeAvantagesModifier = null;
+    protected $dureeAvantageModifier = null;
 
     /**
-     * Modificateur à la durée des Altérations donné par l'objet
+     * Modificateur à la Durée d'altération donné par l'objet
      *
      * @ORM\Column(type="integer", nullable=true)
      *
      * @var integer|null
      */
-    protected $dureeAlterationsModifier = null;
+    protected $dureeAlterationModifier = null;
 
     /**
      * Modificateur à la Férocité donné par l'objet
@@ -163,6 +163,11 @@ class BonusItem extends BuffItem
 
         $item_specific = $item[strtolower($item['type'])];
 
+        if ($item['type'] == "UpgradeComponent")
+        {
+            $item_specific = $item['upgrade_component'];
+        }
+
         $item_infusion_slots = $item_specific['infusion_slots'];
         if (is_array($item_infusion_slots) && count($item_infusion_slots)) {
             foreach ($item_infusion_slots as $number => $type) {
@@ -174,10 +179,28 @@ class BonusItem extends BuffItem
         $item_infix_upgrade = $item_specific['infix_upgrade'];
         if (is_array($item_infix_upgrade) && count($item_infix_upgrade)) {
             if (isset($item_infix_upgrade['buff'])) {
-                if ($item_infix_upgrade['buff']['buff_skill_id'] == 16631) {
-                    $this->setDureeAlterationsModifier(10);
-                } elseif ($item_infix_upgrade['buff']['buff_skill_id'] == 16517) {
-                    $this->setDureeAvantageModifier(1);
+                if ( in_array($item['type'], array('Armor', 'Trinket', 'UpgradeComponent', 'Weapon'))
+                    && !stristr($this->getName(), 'cachet')
+                    && !stristr($this->getName(), 'infusion')
+                    && !stristr($this->getName(), 'rune')) {
+                    $pregMatches = array();
+                    if (preg_match_all("/(?'name'[\pL ']*) \+(?'modifier'\d{1,2})\%?/u",
+                        $item_infix_upgrade['buff']['description'], $pregMatches, PREG_SET_ORDER)) {
+                        foreach($pregMatches as $match)
+                        {
+                            if (array_key_exists($match['name'],
+                                Constants::$translation['attributes_modifier_functions'])) {
+                                    $modifierFunction = Constants::$translation['attributes_modifier_functions'][$match['name']];
+                                    $this->$modifierFunction($match['modifier']);
+                                }
+                        }
+                    } else {
+                        $this->setBuffSkillId($item_infix_upgrade['buff']['skill_id']);
+                        $this->setBuffSkillDescription($item_infix_upgrade['buff']['description']);
+                    }
+                } else {
+                    $this->setBuffSkillId($item_infix_upgrade['buff']['skill_id']);
+                    $this->setBuffSkillDescription($item_infix_upgrade['buff']['description']);
                 }
             }
             if (isset($item_infix_upgrade['attributes']) && is_array($item_infix_upgrade['attributes']) && count($item_infix_upgrade['attributes'])) {
@@ -266,7 +289,7 @@ class BonusItem extends BuffItem
         if (! is_numeric($modifier)) {
             throw new \InvalidArgumentException('La fonction attend un modifier entier. Modifier donné : ' . var_dump($modifier));
         }
-        $this->dureeAvantagesModifier = $modifier;
+        $this->dureeAvantageModifier = $modifier;
         return $this;
     }
 
@@ -277,12 +300,12 @@ class BonusItem extends BuffItem
      * @throws \InvalidArgumentException
      * @return BonusItem
      */
-    public function setDureeAlterationsModifier($modifier)
+    public function setDureeAlterationModifier($modifier)
     {
         if (! is_numeric($modifier)) {
             throw new \InvalidArgumentException('La fonction attend un modifier entier. Modifier donné : ' . var_dump($modifier));
         }
-        $this->dureeAlterationsModifier = $modifier;
+        $this->dureeAlterationModifier = $modifier;
         return $this;
     }
 
@@ -533,7 +556,7 @@ class BonusItem extends BuffItem
      */
     public function getDureeAvantageModifier()
     {
-        return $this->dureeAvantagesModifier;
+        return $this->dureeAvantageModifier;
     }
 
     /**
@@ -542,9 +565,9 @@ class BonusItem extends BuffItem
      *
      * @return integer|null
      */
-    public function getDureeAlterationsModifier()
+    public function getDureeAlterationModifier()
     {
-        return $this->dureeAlterationsModifier;
+        return $this->dureeAlterationModifier;
     }
 
     /**
