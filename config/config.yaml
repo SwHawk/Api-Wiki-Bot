@@ -1,0 +1,16 @@
+config:
+  driver:       pdo_mysql
+  user:         GW2WikiBot
+  password:     Gr5NAaYYvt9fyRYV
+  dbname:       GW2WikiBot
+  unix_socket:  /var/lib/mysql/mysql.sock
+  charset:      utf8
+  
+wikiBotConfig:
+  WikiTestBot:
+    username:   Golem Artisan
+    password:   Sins_Diplo*2012
+  WikiTestAdmin:
+    username:   SilverWingedHawk
+    password:   Sins_Diplo*2012
+  
