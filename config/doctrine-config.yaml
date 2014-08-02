@@ -1,7 +1,0 @@
-config:
-  driver:   xxxxx
-  user:     xxxxx     
-  password: xxxxx
-  dbname:   xxxxx
-  host:     xxxxx
-  charset:  xxxxx
